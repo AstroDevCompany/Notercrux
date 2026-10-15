@@ -1,4 +1,4 @@
-# ADR 0004 — E2EE key hierarchy, recovery and device enrollment
+# ADR 0004: E2EE key hierarchy, recovery and device enrollment
 
 **Status:** Proposed (spike: `crates/crypto`). **Not independently reviewed.**
 

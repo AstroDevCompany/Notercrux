@@ -1,4 +1,4 @@
-# ADR 0001 — Tauri 2 + React desktop shell
+# ADR 0001: Tauri 2 + React desktop shell
 
 **Status:** Accepted
 
@@ -10,9 +10,9 @@ matter more than any single feature.
 
 ## Options
 
-- **Electron** — mature, but ships a full Chromium per app and has no first-class Rust core.
-- **Tauri 2 + React** — system webview, Rust backend, built-in `windowEffects`, small binaries.
-- **Fully native (SwiftUI/WinUI)** — best fidelity, but two desktop codebases and no mature
+- **Electron**: mature, but ships a full Chromium per app and has no first-class Rust core.
+- **Tauri 2 + React**: system webview, Rust backend, built-in `windowEffects`, small binaries.
+- **Fully native (SwiftUI/WinUI)**: best fidelity, but two desktop codebases and no mature
   ProseMirror-class editor.
 
 ## Decision
@@ -31,4 +31,4 @@ Tauri 3 is currently alpha; we pin to 2.x.
 - `macOSPrivateApi` is required for a transparent window. This API is rejected by the Mac App
   Store; direct distribution is assumed. Revisit if App Store distribution becomes a goal.
 - The UI can run in a plain browser against a localStorage mock (`pnpm web`) for fast iteration.
-  The mock is a convenience, not a behavioural reference — the Rust storage crate is.
+  The mock is a convenience, not a behavioural reference. The Rust storage crate is.

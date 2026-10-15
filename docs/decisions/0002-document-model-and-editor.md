@@ -1,4 +1,4 @@
-# ADR 0002 — Structured block documents and Tiptap
+# ADR 0002: Structured block documents and Tiptap
 
 **Status:** Accepted (spike validated; see "Limits")
 

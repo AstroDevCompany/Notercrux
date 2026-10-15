@@ -50,10 +50,10 @@ Workspace: 3,000 root pages and one 10,000-block page.
 | ------------------------------------------------------------ | ---------- | -------------- |
 | Open a small page with 3,000 pages in the sidebar            | 250–350 ms | 13–15 ms       |
 | Sidebar rows in the DOM                                      | 3,000      | ~30 (windowed) |
-| Open a 1,000-block page                                      | —          | 70–100 ms      |
-| Open a 10,000-block page                                     | —          | 1.0–2.0 s      |
-| Leave a 10,000-block page                                    | —          | ~0.46 s        |
-| Keystroke in a 10,000-block page (script + layout, no paint) | —          | ~9 ms median   |
+| Open a 1,000-block page                                      | n/a        | 70–100 ms      |
+| Open a 10,000-block page                                     | n/a        | 1.0–2.0 s      |
+| Leave a 10,000-block page                                    | n/a        | ~0.46 s        |
+| Keystroke in a 10,000-block page (script + layout, no paint) | n/a        | ~9 ms median   |
 
 Finding that changed the code: every selection re-rendered all 3,000 sidebar rows. The tree now
 renders only the visible window with memoized rows and stable handlers, and the database table is

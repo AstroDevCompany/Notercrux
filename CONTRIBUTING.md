@@ -21,6 +21,8 @@ See [docs/development](docs/development/README.md). In short: `pnpm install`, th
   dependencies (licence, maintenance, platform support, security history).
 - **Docs are part of the change.** Update docs and ADRs in the same PR, and never document
   something as available that is not implemented.
+- **No em dashes** anywhere (code, comments, docs). Use a colon, a period, or parentheses instead.
+  `pnpm check:dashes` enforces it and CI runs it.
 - **UI:** check light and dark, keyboard-only use, reduced transparency and reduced motion.
 
 ## Before opening a PR

@@ -14,7 +14,7 @@ Notercrux is pre-alpha. This guide covers only what works today.
 
 ## Editing
 
-- **Slash menu:** type `/` on any line to insert a block — text, headings, lists, to-do, quote,
+- **Slash menu:** type `/` on any line to insert a block: text, headings, lists, to-do, quote,
   callout, code, divider. Keep typing to filter (`/todo`, `/h2`), arrows and `Enter` to choose.
 - **Markdown shortcuts:** `# `, `## ` headings, `- ` or `1. ` lists, `[ ] ` to-do, `> ` quote,
   three backticks for code, `**bold**`, `*italic*`, `` `code` ``. `Tab` / `Shift+Tab` nest list items.

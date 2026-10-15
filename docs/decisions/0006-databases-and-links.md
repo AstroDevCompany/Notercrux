@@ -1,4 +1,4 @@
-# ADR 0006 — Databases, properties and page links
+# ADR 0006: Databases, properties and page links
 
 **Status:** Accepted for the desktop app; interaction with sync is **not yet designed** (see below).
 

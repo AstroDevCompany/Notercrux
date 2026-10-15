@@ -13,7 +13,8 @@
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "eslint . && cargo clippy --workspace --all-targets -- -D warnings",
     "format": "prettier --write . && cargo fmt --all",
-    "format:check": "prettier --check . && cargo fmt --all --check"
+    "format:check": "prettier --check . && cargo fmt --all --check",
+    "check:dashes": "./scripts/check-no-em-dashes.sh"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

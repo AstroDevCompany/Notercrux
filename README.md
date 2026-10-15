@@ -8,7 +8,7 @@
 # Notercrux
 
 **A local-first, privacy-first page editor with a glass interface.**
-An open-source Notion alternative for individuals — fast, light, and yours.
+An open-source Notion alternative for individuals. Fast, light, and yours.
 
 <sub>Pre-alpha · AGPL-3.0 · macOS & Windows first, iOS later</sub>
 

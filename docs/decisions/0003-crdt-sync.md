@@ -1,4 +1,4 @@
-# ADR 0003 — Loro CRDT documents over an opaque relay
+# ADR 0003: Loro CRDT documents over an opaque relay
 
 **Status:** Proposed (spike: `crates/sync`)
 
@@ -9,9 +9,9 @@ deletion, movement and concurrent text edits, with no silent data loss.
 
 ## Options
 
-- **Yjs / `yrs`** — very mature; tree moves are not first-class.
-- **Automerge** — mature; larger documents and slower for long text.
-- **Loro** — CRDT tree (with move), rich text, Rust-native with a small API surface.
+- **Yjs / `yrs`**: very mature; tree moves are not first-class.
+- **Automerge**: mature; larger documents and slower for long text.
+- **Loro**: CRDT tree (with move), rich text, Rust-native with a small API surface.
 
 ## Spike
 

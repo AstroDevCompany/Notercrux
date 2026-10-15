@@ -32,5 +32,5 @@
 | Honest-but-curious sync server | Sees only ciphertext and minimal operational metadata         | Spike         |
 | Active network/server attacker | Cannot read content; enrollment MITM caught by SAS comparison | Spike         |
 | Stolen revoked device          | Should lose access after key rotation                         | Not designed  |
-| Malware on an unlocked device  | Out of scope                                                  | —             |
+| Malware on an unlocked device  | Out of scope                                                  | n/a           |
 | Local disk access              | Local database is currently **unencrypted**                   | Not addressed |

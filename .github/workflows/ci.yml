@@ -40,6 +40,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      - run: ./scripts/check-no-em-dashes.sh
       - run: pnpm exec prettier --check . '!Implementation'
       - run: pnpm exec eslint .
       - run: pnpm typecheck
