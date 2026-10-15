@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AppLogo } from './components/AppLogo';
+import { ContextMenu, type MenuItem } from './components/ContextMenu';
 import { CommandPalette } from './components/CommandPalette';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { PageView } from './components/PageView';
@@ -7,7 +8,7 @@ import { SettingsDialog } from './components/SettingsDialog';
 import { Sidebar } from './components/Sidebar';
 import { Toolbar } from './components/Toolbar';
 import { useMaterial } from './hooks/useMaterial';
-import { actions, useApp } from './state/app';
+import { actions, canGo, getState, useApp } from './state/app';
 import { commandForEvent } from './state/shortcuts';
 
 export default function App() {
@@ -21,6 +22,42 @@ export default function App() {
   const page = pages.find((p) => p.id === currentId && !p.archivedAt);
 
   useEffect(() => void actions.init(), []);
+
+  // Fallback context menu: anywhere not handled by a component (those stop propagation). Text
+  // fields keep the native menu (spelling, cut/copy/paste); nothing else shows the webview's
+  // default menu (Reload, Inspect…).
+  const [appMenu, setAppMenu] = useState<{ x: number; y: number; items: MenuItem[] } | null>(null);
+  const onContextMenu = (e: React.MouseEvent) => {
+    if (e.defaultPrevented) return;
+    if ((e.target as HTMLElement).closest('input, textarea, select, [contenteditable="true"]'))
+      return;
+    e.preventDefault();
+    const st = getState();
+    setAppMenu({
+      x: e.clientX,
+      y: e.clientY,
+      items: [
+        { label: 'New page', icon: 'plus', onSelect: () => void actions.createPage(null) },
+        { label: 'New database', icon: 'table', onSelect: () => void actions.createDatabase(null) },
+        { type: 'separator' },
+        { label: 'Back', icon: 'back', disabled: !canGo(st, -1), onSelect: () => actions.go(-1) },
+        {
+          label: 'Forward',
+          icon: 'forward',
+          disabled: !canGo(st, 1),
+          onSelect: () => actions.go(1),
+        },
+        { type: 'separator' },
+        { label: 'Search…', icon: 'search', onSelect: () => actions.setPalette(true) },
+        {
+          label: st.sidebarOpen ? 'Hide sidebar' : 'Show sidebar',
+          icon: 'sidebar',
+          onSelect: () => actions.toggleSidebar(),
+        },
+        { label: 'Settings', icon: 'settings', onSelect: () => actions.setSettings(true) },
+      ],
+    });
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -55,7 +92,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className={`shell${sidebarOpen ? '' : ' sidebar-closed'}`}>
+    <div className={`shell${sidebarOpen ? '' : ' sidebar-closed'}`} onContextMenu={onContextMenu}>
       {sidebarOpen && <Sidebar />}
       <main className="content">
         <Toolbar />
@@ -100,6 +137,14 @@ export default function App() {
             OK
           </button>
         </div>
+      )}
+      {appMenu && (
+        <ContextMenu
+          x={appMenu.x}
+          y={appMenu.y}
+          items={appMenu.items}
+          onClose={() => setAppMenu(null)}
+        />
       )}
       <CommandPalette />
       <SettingsDialog />

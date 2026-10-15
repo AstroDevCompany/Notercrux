@@ -102,6 +102,8 @@ const set = (s: LinkMenuState) => {
   listeners.forEach((l) => l());
 };
 
+export const isLinkMenuOpen = () => state.open;
+
 export function useLinkMenu(): LinkMenuState {
   return useSyncExternalStore(
     (cb) => (listeners.add(cb), () => listeners.delete(cb)),

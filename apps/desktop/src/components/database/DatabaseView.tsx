@@ -33,6 +33,7 @@ export function DatabaseView({ page }: { page: Page }) {
   const [panel, setPanel] = useState<Panel>(null);
   const [menu, setMenu] = useState<{ x: number; y: number; view: View } | null>(null);
   const [renaming, setRenaming] = useState<string | null>(null);
+  const [rowMenu, setRowMenu] = useState<{ x: number; y: number; rec: DbRecord } | null>(null);
   const filterBtn = useRef<HTMLButtonElement>(null);
   const sortBtn = useRef<HTMLButtonElement>(null);
   const propsBtn = useRef<HTMLButtonElement>(null);
@@ -221,7 +222,35 @@ export function DatabaseView({ page }: { page: Page }) {
         />
       )}
 
+      {rowMenu && (
+        <ContextMenu
+          x={rowMenu.x}
+          y={rowMenu.y}
+          onClose={() => setRowMenu(null)}
+          items={[
+            { label: 'Open', icon: 'page', onSelect: () => actions.open(rowMenu.rec.page.id) },
+            {
+              label: 'Duplicate',
+              icon: 'copy',
+              onSelect: () => void actions.duplicate(rowMenu.rec.page.id),
+            },
+            { type: 'separator' },
+            {
+              label: 'Move to archive',
+              icon: 'archive',
+              danger: true,
+              onSelect: () => void actions.archive(rowMenu.rec.page.id),
+            },
+          ]}
+        />
+      )}
+
       <Table
+        onRowMenu={(e, rec) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setRowMenu({ x: e.clientX, y: e.clientY, rec });
+        }}
         columns={columns}
         visible={visible}
         rows={rows}
@@ -273,6 +302,7 @@ function Table({
   total,
   setValue,
   onNew,
+  onRowMenu,
   filtered,
 }: {
   columns: string;
@@ -281,6 +311,7 @@ function Table({
   total: number;
   setValue: (pageId: string, propertyId: string, value: unknown) => void;
   onNew: () => void;
+  onRowMenu: (e: React.MouseEvent, rec: DbRecord) => void;
   filtered: boolean;
 }) {
   const scroller = useRef<HTMLDivElement>(null);
@@ -343,6 +374,7 @@ function Table({
                 aria-rowindex={index + 2}
                 className="db-grid db-row"
                 style={{ gridTemplateColumns: columns, top: index * ROW_H, height: ROW_H }}
+                onContextMenu={(e) => onRowMenu(e, r)}
               >
                 <div role="gridcell" className="db-td db-title-cell">
                   <TitleCell record={r} />

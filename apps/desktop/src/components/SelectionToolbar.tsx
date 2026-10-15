@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Editor } from '@tiptap/core';
+import { getBlockRange } from '../editor/blockRange';
 
 interface Pos {
   left: number;
@@ -49,6 +50,7 @@ export function SelectionToolbar({ editor }: { editor: Editor | null }) {
       const { from, to, empty } = editor.state.selection;
       if (
         empty ||
+        getBlockRange(editor.state) !== null || // blocks are selected: the block menu applies, not text formatting
         !editor.isFocused ||
         editor.isActive('codeBlock') ||
         editor.state.selection.constructor.name === 'NodeSelection'

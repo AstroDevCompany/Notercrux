@@ -45,6 +45,8 @@ notes app yet. What exists, and how well it is verified:
 | Desktop shell (Tauri 2): sidebar page tree, palette, menus, dialogs, settings                                        | Working in the browser preview; native build compiles                       |
 | Page tree: create, nest, rename, move, duplicate, archive, restore, delete                                           | Implemented and tested in Rust; wired to the sidebar                        |
 | Editor: headings, lists, tasks, quotes, callouts, code, marks, slash menu, selection toolbar, block moves, undo/redo | Working; saved as structured blocks, not HTML                               |
+| Marquee selection of several blocks from the margins (copy/cut/delete/duplicate/turn into)                           | Implemented and tested; auto-scroll checked in a browser preview            |
+| Block menu (click the handle), right-click menus, code language + highlighting, callout icon/colour                  | Implemented and tested; frosted look verified in a browser preview only     |
 | Drag-and-drop for pages and blocks, keyboard reordering                                                              | Implemented; verified with synthetic events only (not native pointer drags) |
 | Page links (`[[`), backlinks, navigation history, content search with excerpts, command palette                      | Implemented and tested                                                      |
 | Databases: typed properties, relations, views with filters and sorts, record pages                                   | Implemented and tested; sync behaviour not designed yet                     |

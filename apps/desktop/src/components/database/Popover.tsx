@@ -9,6 +9,16 @@ import {
 import { createPortal } from 'react-dom';
 import { useDialog } from '../../hooks/useDialog';
 
+/** Anything with a bounding box: an element ref, or a plain object for a point/virtual anchor. */
+export interface Anchor {
+  getBoundingClientRect(): DOMRect;
+  contains?(node: Node): boolean;
+}
+const rectOf = (a: RefObject<HTMLElement | null> | Anchor) =>
+  'current' in a ? a.current?.getBoundingClientRect() : a.getBoundingClientRect();
+const holds = (a: RefObject<HTMLElement | null> | Anchor, n: Node) =>
+  'current' in a ? !!a.current?.contains(n) : !!a.contains?.(n);
+
 /**
  * Glass popover anchored under an element. Rendered in a portal so it is never clipped by (or
  * mispositioned inside) scrolling or transformed ancestors such as the virtualized table.
@@ -20,7 +30,7 @@ export function Popover({
   label,
   width = 340,
 }: {
-  anchor: RefObject<HTMLElement | null>;
+  anchor: RefObject<HTMLElement | null> | Anchor;
   onClose: () => void;
   children: ReactNode;
   label: string;
@@ -31,18 +41,25 @@ export function Popover({
   useDialog(ref, onClose);
 
   useLayoutEffect(() => {
-    const r = anchor.current?.getBoundingClientRect();
-    if (!r) return;
-    const left = Math.max(8, Math.min(r.left, window.innerWidth - width - 8));
-    const top = r.bottom + 6;
-    setPos({ left, top, maxHeight: Math.max(160, window.innerHeight - top - 12) });
+    const r = rectOf(anchor);
+    const el = ref.current;
+    if (!r || !el) return;
+    const pad = 8;
+    const natural = el.scrollHeight; // measured before any max-height is applied
+    const left = Math.max(pad, Math.min(r.left, window.innerWidth - width - pad));
+    let top = r.bottom + 6;
+    if (top + natural > window.innerHeight - pad) {
+      // Not enough room below: prefer opening above the anchor, else pin to the window and scroll.
+      const above = r.top - 6 - natural;
+      top = above >= pad ? above : Math.max(pad, window.innerHeight - pad - natural);
+    }
+    setPos({ left, top, maxHeight: window.innerHeight - top - pad });
   }, [anchor, width]);
 
   useEffect(() => {
     const away = (e: MouseEvent) => {
       const el = ref.current;
-      if (el && !el.contains(e.target as Node) && !anchor.current?.contains(e.target as Node))
-        onClose();
+      if (el && !el.contains(e.target as Node) && !holds(anchor, e.target as Node)) onClose();
     };
     window.addEventListener('mousedown', away);
     return () => window.removeEventListener('mousedown', away);

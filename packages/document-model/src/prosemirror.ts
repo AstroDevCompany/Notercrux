@@ -135,7 +135,10 @@ function toBlocks(node: PMNode): Block[] {
         id: idOf(node),
         type: 'callout',
         text: '',
-        attrs: { icon: node.attrs?.icon ?? '💡' },
+        attrs: {
+          icon: node.attrs?.icon ?? '💡',
+          ...(node.attrs?.tone ? { tone: node.attrs.tone } : {}),
+        },
       };
       if (head?.type === 'paragraph')
         Object.assign(c, leaf('callout', head), { id: c.id, attrs: c.attrs });
@@ -241,7 +244,11 @@ function pmGroup(blocks: Block[], i: number): PMNode[] {
       const head = withContent('paragraph', {}, pmInline(b));
       const rest = (b.children ?? []).flatMap((_, k, all) => pmGroup(all, k));
       return [
-        withContent('callout', { blockId: b.id, icon: b.attrs?.icon ?? '💡' }, [head, ...rest]),
+        withContent(
+          'callout',
+          { blockId: b.id, icon: b.attrs?.icon ?? '💡', tone: b.attrs?.tone ?? null },
+          [head, ...rest],
+        ),
       ];
     }
     case 'code':

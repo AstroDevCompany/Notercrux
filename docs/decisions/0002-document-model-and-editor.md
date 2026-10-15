@@ -32,6 +32,16 @@ devices. Storing HTML or Markdown blobs makes all three hard.
 - `text` is flat with mark ranges, which maps cleanly onto Loro rich text (ADR 0003).
 - Block ids are not yet validated for uniqueness across a whole document on the Rust side.
 
+## Multi-block selection
+
+A "block range" (`editor/blockRange.ts`) is a run of consecutive **top-level** blocks, created by
+dragging a rubber band in the page margins (`components/MarqueeSelect.tsx`). It lives in plugin
+state, is cleared by any document or selection change, and is drawn as an overlay rather than via
+node decorations (which do not reliably reach React node views). Copy, cut, delete and paste are
+overridden so whole blocks are handled; leaving the editor selection as the matching text span keeps
+focus and accessibility working. Blocks are hit-tested by **vertical extent only**. Limits: list
+items cannot be selected individually, and a range cannot be moved or dragged.
+
 ## Phase 2 additions
 
 - **Callouts** are a custom Tiptap node (`apps/desktop/src/editor/callout.ts`) mapped to the

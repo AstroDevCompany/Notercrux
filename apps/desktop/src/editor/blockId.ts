@@ -47,7 +47,8 @@ export const BlockId = Extension.create({
             if (!TYPES.includes(node.type.name)) return;
             const id = node.attrs.blockId as string | null;
             if (!id || seen.has(id)) {
-              tr.setNodeMarkup(pos, undefined, { ...node.attrs, blockId: newId() });
+              // An attribute step (not setNodeMarkup) so a selected block stays selected.
+              tr.setNodeAttribute(pos, 'blockId', newId());
               changed = true;
             } else {
               seen.add(id);

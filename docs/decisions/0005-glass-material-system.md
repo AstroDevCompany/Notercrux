@@ -25,16 +25,27 @@ Verified: CSS materials in a browser (light/dark), reduced-transparency tokens b
 `backdrop-filter` in WebView2, and performance with many stacked panels. See
 `docs/development/testing.md`.
 
-## Addendum — what `backdrop-filter` can and cannot blur
+## Addendum — what `backdrop-filter` can and cannot blur (revised)
 
 `backdrop-filter` only blurs **web content** behind an element, never the native window material
-(macOS vibrancy, Windows Mica) behind the webview. In the native app a menu over the sidebar
-therefore has nothing to blur and looks merely see-through. Consequences, applied in Phase 3:
+(macOS vibrancy, Windows Mica) behind the webview. Two lessons so far:
 
-- Floating surfaces (menus, popovers, palette, dialogs) use higher-opacity fills (about 0.9) so they
-  stay legible and read as frosted where web content is behind them, instead of relying on blur.
+1. _First attempt (wrong):_ because menus over the sidebar had nothing to blur, fills were raised to
+   about 0.9 opacity. That made the frost invisible everywhere, including over page content where
+   blurring works. Reported as "not frosted glass".
+2. _Current approach:_ floating surfaces use **low-opacity fills (about 0.5–0.6) with strong blur
+   (36–44 px), saturation 1.9 and a diagonal sheen gradient** (`--mat-sheen`). Over page content the
+   text behind is visibly smeared; over the sidebar the surface still reads as glass because of the
+   sheen, edge highlight and tint, even though the native material under it cannot be blurred.
+   Reduced transparency removes the sheen and uses solid fills.
+
+Other decisions:
+
 - The sidebar drops its (no-op) `backdrop-filter` in the native app and relies on the native
   material alone; the filter remains in the browser preview.
 - Menu item highlighting follows the pointer through focus, not CSS `:hover`, because WebKit may not
-  repaint `:hover` inside composited, filtered layers. This is a reasoned fix for a reported
-  symptom; it has **not** been verified in the native window.
+  repaint `:hover` inside composited, filtered layers.
+- Autocomplete lists (slash menu, page picker, palette) hide their scrollbars; they still scroll.
+
+Verification: the frosted look and the hover behaviour were checked in a browser preview
+(Chromium). They have **not** been confirmed in the native WKWebView/WebView2 windows.

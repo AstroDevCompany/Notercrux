@@ -26,6 +26,34 @@ Notercrux is pre-alpha. This guide covers only what works today.
 - Changes save automatically a moment after you stop typing; the corner shows _Saving…_ /
   _Saved_, or an error if something could not be saved.
 
+## Block options and right-click
+
+- **Block handle (`⋮⋮`):** hover a block and **click** the handle. The block is selected and a
+  menu opens with the block's properties, **Turn into**, Duplicate, Move up/down, Copy and Delete.
+  **Drag** the handle to move the block instead.
+- **Keyboard:** `Esc` selects the block under the cursor (`Esc` again goes back to the text), `Enter`
+  opens its menu, `Delete` removes it, `⌥↑/↓` moves it and `⌘/Ctrl+D` duplicates it.
+- **Right-click** in a page for Cut, Copy, Paste (and paste as plain text), formatting for the
+  selected text, **Turn into**, and block actions. Over a page link it also offers _Open linked page_
+  and _Remove link_. Right-click a database row for Open, Duplicate and Archive; elsewhere you get a
+  short app menu (new page, back/forward, search, settings). Text fields keep the system menu.
+- **Code blocks** have a language selector (and a Copy button) in their header, and are
+  syntax-highlighted. **Callouts** have a clickable icon that opens an icon and colour picker; any
+  emoji can be pasted in.
+
+## Selecting several blocks
+
+Press in the empty margin beside the text (or in the empty space below it) and drag: a band appears
+and every block it touches is selected. Dragging near the top or bottom edge scrolls the page. A
+lone list, quote or callout counts as one block. With blocks selected:
+
+- `Delete` / `Backspace` removes them, `⌘/Ctrl+C` and `⌘/Ctrl+X` copy or cut whole blocks (pasting
+  elsewhere keeps their types), `⌘/Ctrl+D` duplicates them.
+- Right-click for Copy, Cut, Duplicate, **Turn into** (applies to every block) and Delete.
+- `Esc` (or an arrow key) leaves the selection; clicking in the margin does too. Typing does not
+  replace the blocks: it leaves the selection and types at its end. `Alt+↑/↓` is ignored while
+  several blocks are selected (moving a range is not supported yet).
+
 ## Organizing pages
 
 Drag a page in the sidebar: the top edge of a row puts it before, the bottom edge after, and the

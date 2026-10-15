@@ -125,6 +125,8 @@ const set = (s: SlashState) => {
   listeners.forEach((l) => l());
 };
 
+export const isSlashOpen = () => state.open;
+
 export function useSlashState(): SlashState {
   return useSyncExternalStore(
     (cb) => (listeners.add(cb), () => listeners.delete(cb)),

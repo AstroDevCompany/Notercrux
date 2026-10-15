@@ -20,14 +20,14 @@
     0 0 0 0.5px var(--mat-edge-outer);
 }
 .glass-overlay {
-  background: var(--mat-overlay-bg);
-  -webkit-backdrop-filter: blur(var(--mat-overlay-blur)) saturate(1.7);
-  backdrop-filter: blur(var(--mat-overlay-blur)) saturate(1.7);
+  background: var(--mat-sheen), var(--mat-overlay-bg);
+  -webkit-backdrop-filter: blur(var(--mat-overlay-blur)) saturate(1.9);
+  backdrop-filter: blur(var(--mat-overlay-blur)) saturate(1.9);
 }
 .glass-popover {
-  background: var(--mat-popover-bg);
-  -webkit-backdrop-filter: blur(var(--mat-popover-blur)) saturate(1.6);
-  backdrop-filter: blur(var(--mat-popover-blur)) saturate(1.6);
+  background: var(--mat-sheen), var(--mat-popover-bg);
+  -webkit-backdrop-filter: blur(var(--mat-popover-blur)) saturate(1.9);
+  backdrop-filter: blur(var(--mat-popover-blur)) saturate(1.9);
   border-radius: var(--radius-md);
 }
 /* Specular edge: a 1px inner highlight that sells the glass without extra layers. */
@@ -68,4 +68,15 @@
 :root[data-native='true'] .glass-sidebar {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+}
+
+/* Autocomplete-style lists scroll with the keyboard and wheel but never show a scrollbar. */
+.slash,
+.palette-list {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.slash::-webkit-scrollbar,
+.palette-list::-webkit-scrollbar {
+  display: none;
 }

@@ -17,6 +17,15 @@ highlighting and the database UI (cells, filters, sorts, properties, views). Sca
 `crates/storage/tests/large_workspace.rs` and `packages/document-model/src/scale.test.ts`; see
 [performance.md](performance.md).
 
+Block editing tests (`editor/blockOps.test.ts`, `components/menus.test.tsx`) cover block lookup,
+turn-into for every kind, duplicate/delete/move, property edits, Esc/Enter/⌘D keyboard paths, the
+context menu's keyboard and submenu behaviour, the block menu and the editor menu items.
+
+Multi-block selection: `editor/blockRange.test.ts` covers the range model (index/position mapping,
+vertical hit-testing, lists as one block), state clearing, Backspace/Delete/Esc/Enter/arrows/⌘D,
+typing, whole-block copy/cut/paste and turn-into; `components/marquee.test.tsx` covers the drag
+(start rules, upward drags, threshold, scrollbar, plain clicks) with stubbed layout.
+
 Run everything with `pnpm test`.
 
 ## Not automated yet (manual checklist)
@@ -28,7 +37,13 @@ Run everything with `pnpm test`.
   real pointer in the native webviews (verified only via synthetic events in a browser preview;
   `dragDropEnabled` is off so Windows WebView2 delivers HTML5 drag events), undo/redo across page
   switches (history is discarded per page).
-- Context-menu hover and frosted appearance in the native window (see ADR 0005 addendum).
+- Margin drag-selection with a real pointer in the native windows. Edge auto-scroll was exercised in a
+  browser preview with a substituted animation-frame clock (the preview pane is hidden, which pauses
+  `requestAnimationFrame`).
+- Frosted appearance of the palette, slash menu and context menus, and context-menu hover, in the
+  native macOS/Windows windows (see ADR 0005 addendum; checked only in a browser preview).
+- Right-click Cut/Copy/Paste against the real system clipboard (including rich paste from other
+  apps) and the block drag handle with a real pointer.
 - Database table with a real pointer: cell editing, popovers, scrolling with thousands of rows.
 - `[[` picker and slash menu with an IME.
 - Native save/open dialogs for export/import (Rust commands; the browser preview uses a download).

@@ -187,3 +187,44 @@ describe('callouts', () => {
     expect(fromProseMirror(toProseMirror(doc))).toEqual(doc);
   });
 });
+
+describe('callout colour', () => {
+  it('is stored as a "tone" attribute only when set, and round-trips', () => {
+    const mk = (tone?: string): PMNode => ({
+      type: 'doc',
+      content: [
+        {
+          type: 'callout',
+          attrs: { blockId: 'c', icon: '🔥', ...(tone ? { tone } : {}) },
+          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'x' }] }],
+        },
+      ],
+    });
+    expect(fromProseMirror(mk()).blocks[0]!.attrs).toEqual({ icon: '🔥' });
+    const doc = fromProseMirror(mk('red'));
+    expect(doc.blocks[0]!.attrs).toEqual({ icon: '🔥', tone: 'red' });
+    expect(fromProseMirror(toProseMirror(doc))).toEqual(doc);
+  });
+});
+
+describe('code block language', () => {
+  it('round-trips the language, including ones the editor does not list', () => {
+    const pm: PMNode = {
+      type: 'doc',
+      content: [
+        {
+          type: 'codeBlock',
+          attrs: { blockId: 'k', language: 'elixir' },
+          content: [{ type: 'text', text: 'IO.puts 1' }],
+        },
+      ],
+    };
+    const doc = fromProseMirror(pm);
+    expect(doc.blocks[0]).toMatchObject({
+      type: 'code',
+      text: 'IO.puts 1',
+      attrs: { language: 'elixir' },
+    });
+    expect(fromProseMirror(toProseMirror(doc))).toEqual(doc);
+  });
+});
