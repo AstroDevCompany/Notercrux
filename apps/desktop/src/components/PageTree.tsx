@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useMemo, useRef, useState, type DragEvent, type KeyboardEvent } from 'react';
 import type { Page } from '@notercrux/document-model';
 import { actions, childrenOf, live, pageLabel, useApp } from '../state/app';
 import { ContextMenu, type MenuItem } from './ContextMenu';
@@ -38,6 +38,42 @@ export function PageTree() {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [menu, setMenu] = useState<{ x: number; y: number; page: Page } | null>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const [drag, setDrag] = useState<{
+    id: string;
+    over: string | null;
+    where: 'before' | 'after' | 'inside';
+  } | null>(null);
+
+  const descendantIds = (id: string): Set<string> => {
+    const out = new Set([id]);
+    for (let grew = true; grew;) {
+      grew = false;
+      for (const p of pages) {
+        if (p.parentId && out.has(p.parentId) && !out.has(p.id)) {
+          out.add(p.id);
+          grew = true;
+        }
+      }
+    }
+    return out;
+  };
+
+  const onDragOver = (e: DragEvent, p: Page) => {
+    if (!drag || descendantIds(drag.id).has(p.id)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const r = e.currentTarget.getBoundingClientRect();
+    const y = (e.clientY - r.top) / r.height;
+    const where = y < 0.28 ? 'before' : y > 0.72 ? 'after' : 'inside';
+    if (drag.over !== p.id || drag.where !== where) setDrag({ ...drag, over: p.id, where });
+  };
+  const onDrop = (e: DragEvent, p: Page) => {
+    if (!drag) return;
+    e.preventDefault();
+    const { id, where } = drag;
+    setDrag(null);
+    if (!descendantIds(id).has(p.id)) void actions.place(id, p.id, where);
+  };
 
   const tabStop =
     rows.find((r) => r.page.id === (focusId ?? currentId))?.page.id ?? rows[0]?.page.id;
@@ -61,6 +97,16 @@ export function PageTree() {
   const onKeyDown = (e: KeyboardEvent, row: Row, i: number) => {
     if ((e.target as HTMLElement).tagName === 'INPUT') return;
     const p = row.page;
+    if (e.altKey && e.key.startsWith('Arrow')) {
+      const how = { ArrowUp: 'up', ArrowDown: 'down', ArrowRight: 'indent', ArrowLeft: 'outdent' }[
+        e.key
+      ] as 'up' | 'down' | 'indent' | 'outdent' | undefined;
+      if (how) {
+        e.preventDefault();
+        void actions.shift(p.id, how).then(() => focusRow(p.id));
+      }
+      return;
+    }
     switch (e.key) {
       case 'ArrowDown':
         if (rows[i + 1]) focusRow(rows[i + 1]!.page.id);
@@ -139,7 +185,18 @@ export function PageTree() {
               aria-expanded={row.hasChildren ? row.expanded : undefined}
               data-row-id={p.id}
               tabIndex={p.id === tabStop ? 0 : -1}
-              className={`tree-row${selected ? ' is-selected' : ''}`}
+              draggable={renamingId !== p.id}
+              onDragStart={(e) => {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', p.id);
+                setDrag({ id: p.id, over: null, where: 'inside' });
+              }}
+              onDragOver={(e) => onDragOver(e, p)}
+              onDrop={(e) => onDrop(e, p)}
+              onDragEnd={() => setDrag(null)}
+              className={`tree-row${selected ? ' is-selected' : ''}${drag?.id === p.id ? ' is-dragging' : ''}${
+                drag?.over === p.id ? ` drop-${drag.where}` : ''
+              }`}
               style={{ paddingLeft: 6 + (row.depth - 1) * 14 }}
               onClick={() => (actions.select(p.id), setFocusId(p.id))}
               onFocus={(e) => e.target === e.currentTarget && setFocusId(p.id)}

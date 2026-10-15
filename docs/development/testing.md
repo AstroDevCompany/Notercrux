@@ -17,8 +17,11 @@ Run everything with `pnpm test`.
 - Native window material on **macOS** (vibrancy follows window focus, light/dark switch).
 - Native window material on **Windows** (Mica), and `backdrop-filter` inside WebView2.
 - Performance with several overlays visible; large page trees; long documents.
-- Editor: selection, paste from other apps, IME input, drag-and-drop (not implemented), undo/redo
-  across page switches (history is discarded per page).
+- Editor: paste from other apps, IME input, the block drag handle and sidebar drag-and-drop with a
+  real pointer in the native webviews (verified only via synthetic events in a browser preview;
+  `dragDropEnabled` is off so Windows WebView2 delivers HTML5 drag events), undo/redo across page
+  switches (history is discarded per page).
+- Native save/open dialogs for export/import (Rust commands; the browser preview uses a download).
 - Keyboard-only walkthrough and screen-reader pass of the sidebar tree, palette and dialogs.
 - UI end-to-end tests of the native app.
 

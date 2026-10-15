@@ -37,16 +37,18 @@ Not goals: AI features, charts, or team-workspace features. See the [blueprint](
 Notercrux is at **Phase 0/1: foundation and technical spikes**. It is not usable as a daily
 notes app yet. What exists, and how well it is verified:
 
-| Area                                                                                           | State                                                                       |
-| ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Desktop shell (Tauri 2): sidebar page tree, palette, menus, dialogs, settings                  | Working in the browser preview; native build compiles                       |
-| Page tree: create, nest, rename, move, duplicate, archive, restore, delete                     | Implemented and tested in Rust; wired to the sidebar (no drag-and-drop yet) |
-| Editor: headings, lists, tasks, quotes, code, marks, undo/redo                                 | Working; saved as structured blocks, not HTML                               |
-| Local persistence + full-text search (SQLite)                                                  | Implemented and tested                                                      |
-| Glass materials, light/dark, reduced transparency / motion                                     | Implemented; **native macOS/Windows materials not yet verified**            |
-| CRDT sync between two simulated devices ([ADR 0003](docs/decisions/0003-crdt-sync.md))         | Spike, tested; **not used by the app**                                      |
-| E2EE keys, recovery, device enrollment ([ADR 0004](docs/decisions/0004-e2ee-key-hierarchy.md)) | Spike, tested; **not reviewed, not used by the app**                        |
-| Sync server, attachments, iOS app, Notion import                                               | Not started                                                                 |
+| Area                                                                                                                 | State                                                                       |
+| -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Desktop shell (Tauri 2): sidebar page tree, palette, menus, dialogs, settings                                        | Working in the browser preview; native build compiles                       |
+| Page tree: create, nest, rename, move, duplicate, archive, restore, delete                                           | Implemented and tested in Rust; wired to the sidebar                        |
+| Editor: headings, lists, tasks, quotes, callouts, code, marks, slash menu, selection toolbar, block moves, undo/redo | Working; saved as structured blocks, not HTML                               |
+| Drag-and-drop for pages and blocks, keyboard reordering                                                              | Implemented; verified with synthetic events only (not native pointer drags) |
+| Export/import: Markdown (lossy, with warnings) and lossless JSON                                                     | Implemented and tested; native file dialogs not exercised yet               |
+| Local persistence + full-text search (SQLite)                                                                        | Implemented and tested                                                      |
+| Glass materials, light/dark, reduced transparency / motion                                                           | Implemented; **native macOS/Windows materials not yet verified**            |
+| CRDT sync between two simulated devices ([ADR 0003](docs/decisions/0003-crdt-sync.md))                               | Spike, tested; **not used by the app**                                      |
+| E2EE keys, recovery, device enrollment ([ADR 0004](docs/decisions/0004-e2ee-key-hierarchy.md))                       | Spike, tested; **not reviewed, not used by the app**                        |
+| Sync server, attachments, iOS app, Notion import                                                                     | Not started                                                                 |
 
 Nothing here has had a security review. Do not rely on it to protect sensitive data.
 

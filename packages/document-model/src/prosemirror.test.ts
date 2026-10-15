@@ -156,3 +156,34 @@ describe('ProseMirror <-> Notercrux document', () => {
     expect(pm.content![0]!.content).toHaveLength(2);
   });
 });
+
+describe('callouts', () => {
+  it('round-trips with icon and nested children', () => {
+    const pm: PMNode = {
+      type: 'doc',
+      content: [
+        {
+          type: 'callout',
+          attrs: { blockId: 'c1', icon: '🔥' },
+          content: [
+            { type: 'paragraph', content: [{ type: 'text', text: 'heads up' }] },
+            {
+              type: 'paragraph',
+              attrs: { blockId: 'c2' },
+              content: [{ type: 'text', text: 'detail' }],
+            },
+          ],
+        },
+      ],
+    };
+    const doc = fromProseMirror(pm);
+    expect(doc.blocks[0]).toMatchObject({
+      id: 'c1',
+      type: 'callout',
+      text: 'heads up',
+      attrs: { icon: '🔥' },
+    });
+    expect(doc.blocks[0]!.children![0]).toMatchObject({ id: 'c2', text: 'detail' });
+    expect(fromProseMirror(toProseMirror(doc))).toEqual(doc);
+  });
+});

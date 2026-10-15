@@ -26,8 +26,18 @@ devices. Storing HTML or Markdown blobs makes all three hard.
 
 ## Limits found by the spike
 
-- The model covers paragraphs, headings, bulleted/numbered/to-do items, quotes, code and dividers.
-  Callouts, tables, images, files and page links are defined as kinds (or planned) but have no editor
-  nodes yet.
+- The model covers paragraphs, headings, bulleted/numbered/to-do items, quotes, callouts, code and
+  dividers. Tables, images, files and page links have no editor nodes yet (`pageLink` exists only as
+  a block kind).
 - `text` is flat with mark ranges, which maps cleanly onto Loro rich text (ADR 0003).
 - Block ids are not yet validated for uniqueness across a whole document on the Rust side.
+
+## Phase 2 additions
+
+- **Callouts** are a custom Tiptap node (`apps/desktop/src/editor/callout.ts`) mapped to the
+  `callout` block kind with an `icon` attribute.
+- **Slash menu** uses `@tiptap/suggestion`; **block handle and block moves** are our own
+  (`@tiptap/extension-drag-handle` was rejected because it requires collaboration packages).
+- **Markdown** export/import is a deliberately small, tested subset parser rather than a
+  general-purpose library, so every unsupported construct can be reported. Revisit if fidelity
+  requirements grow.

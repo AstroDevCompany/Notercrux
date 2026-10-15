@@ -137,3 +137,73 @@ pub fn save_document(
 pub fn search_pages(state: State<'_, AppState>, query: String) -> CmdResult<Vec<Page>> {
     store(&state)?.search(&query, 20).map_err(err)
 }
+
+/// Largest file the importer will read.
+const MAX_IMPORT_BYTES: u64 = 10 * 1024 * 1024;
+
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImportedFile {
+    pub name: String,
+    pub contents: String,
+}
+
+/// Asks the user where to save, then writes there. The webview never supplies a path, so it cannot
+/// write anywhere the user did not choose. Returns `false` if the dialog was cancelled.
+#[tauri::command]
+pub async fn export_file(
+    app: tauri::AppHandle,
+    default_name: String,
+    extension: String,
+    contents: String,
+) -> CmdResult<bool> {
+    use tauri_plugin_dialog::DialogExt;
+    let (tx, rx) = std::sync::mpsc::channel();
+    app.dialog()
+        .file()
+        .set_file_name(&default_name)
+        .add_filter(&extension, &[extension.as_str()])
+        .save_file(move |p| {
+            let _ = tx.send(p);
+        });
+    let Some(path) = rx.recv().map_err(err)? else {
+        return Ok(false);
+    };
+    let path = path.into_path().map_err(err)?;
+    std::fs::write(path, contents).map_err(err)?;
+    Ok(true)
+}
+
+/// Asks the user to pick a Markdown or JSON file and returns its text. `None` if cancelled.
+#[tauri::command]
+pub async fn import_file(app: tauri::AppHandle) -> CmdResult<Option<ImportedFile>> {
+    use tauri_plugin_dialog::DialogExt;
+    let (tx, rx) = std::sync::mpsc::channel();
+    app.dialog()
+        .file()
+        .add_filter(
+            "Markdown or Notercrux page",
+            &["md", "markdown", "txt", "json"],
+        )
+        .pick_file(move |p| {
+            let _ = tx.send(p);
+        });
+    let Some(path) = rx.recv().map_err(err)? else {
+        return Ok(None);
+    };
+    let path = path.into_path().map_err(err)?;
+    let size = std::fs::metadata(&path).map_err(err)?.len();
+    if size > MAX_IMPORT_BYTES {
+        return Err(format!(
+            "That file is too large to import ({} MB, limit 10 MB).",
+            size / 1_048_576
+        ));
+    }
+    let contents = std::fs::read_to_string(&path)
+        .map_err(|e| format!("Could not read the file as text: {e}"))?;
+    let name = path
+        .file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .unwrap_or_default();
+    Ok(Some(ImportedFile { name, contents }))
+}

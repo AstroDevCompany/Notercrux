@@ -18,3 +18,4 @@ notercrux-domain = { path = "../../../crates/domain" }
 notercrux-storage = { path = "../../../crates/storage" }
 serde.workspace = true
 serde_json.workspace = true
+tauri-plugin-dialog = "2"

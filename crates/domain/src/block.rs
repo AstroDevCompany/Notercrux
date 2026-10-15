@@ -141,6 +141,27 @@ mod tests {
         assert_eq!(back.plain_text(), "Title\nparent\nchild");
     }
 
+    /// The exact shape `packages/document-model` produces for every block kind and mark.
+    #[test]
+    fn accepts_the_json_the_editor_layer_produces() {
+        let json = r#"{"version":1,"blocks":[
+          {"id":"0190a000-0000-7000-8000-000000000001","type":"heading","attrs":{"level":2},"text":"H"},
+          {"id":"0190a000-0000-7000-8000-000000000002","type":"paragraph","text":"bold link","marks":[
+            {"from":0,"to":4,"type":"bold"},
+            {"from":5,"to":9,"type":"link","attrs":{"href":"https://x.y"}}]},
+          {"id":"0190a000-0000-7000-8000-000000000003","type":"callout","attrs":{"icon":"💡"},"text":"note","children":[
+            {"id":"0190a000-0000-7000-8000-000000000004","type":"bulletedListItem","text":"nested"}]},
+          {"id":"0190a000-0000-7000-8000-000000000005","type":"todo","attrs":{"checked":true},"text":"t"},
+          {"id":"0190a000-0000-7000-8000-000000000006","type":"code","attrs":{"language":"rs"},"text":"fn main() {}"},
+          {"id":"0190a000-0000-7000-8000-000000000007","type":"divider","text":""},
+          {"id":"0190a000-0000-7000-8000-000000000008","type":"quote","text":"q"},
+          {"id":"0190a000-0000-7000-8000-000000000009","type":"numberedListItem","text":"n"}]}"#;
+        let doc: Document = serde_json::from_str(json).unwrap();
+        assert_eq!(doc.block_count(), 9);
+        assert_eq!(doc.blocks[1].marks[1].kind, "link");
+        assert_eq!(doc.blocks[2].kind, BlockKind::Callout);
+    }
+
     #[test]
     fn unknown_block_kind_is_rejected_not_dropped() {
         let json = r#"{"version":1,"blocks":[{"id":"0190a000-0000-7000-8000-000000000000","type":"hologram","text":""}]}"#;

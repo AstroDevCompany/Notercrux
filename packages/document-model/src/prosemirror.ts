@@ -121,6 +121,21 @@ function toBlocks(node: PMNode): Block[] {
       if (children.length) q.children = children;
       return [q];
     }
+    case 'callout': {
+      const [head, ...rest] = node.content ?? [];
+      const c: Block = {
+        id: idOf(node),
+        type: 'callout',
+        text: '',
+        attrs: { icon: node.attrs?.icon ?? '💡' },
+      };
+      if (head?.type === 'paragraph')
+        Object.assign(c, leaf('callout', head), { id: c.id, attrs: c.attrs });
+      const tail = head?.type === 'paragraph' ? rest : (node.content ?? []);
+      const children = tail.flatMap(toBlocks);
+      if (children.length) c.children = children;
+      return [c];
+    }
     case 'codeBlock': {
       const text = (node.content ?? []).map((n) => n.text ?? '').join('');
       const attrs = node.attrs?.language ? { language: node.attrs.language } : undefined;
@@ -213,6 +228,13 @@ function pmGroup(blocks: Block[], i: number): PMNode[] {
       const head = withContent('paragraph', {}, pmInline(b));
       const rest = (b.children ?? []).flatMap((_, k, all) => pmGroup(all, k));
       return [withContent('blockquote', { blockId: b.id }, [head, ...rest])];
+    }
+    case 'callout': {
+      const head = withContent('paragraph', {}, pmInline(b));
+      const rest = (b.children ?? []).flatMap((_, k, all) => pmGroup(all, k));
+      return [
+        withContent('callout', { blockId: b.id, icon: b.attrs?.icon ?? '💡' }, [head, ...rest]),
+      ];
     }
     case 'code':
       return [

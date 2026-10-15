@@ -10,6 +10,10 @@ import {
 import { api } from '../api';
 import { extensions } from '../editor/extensions';
 import { actions, pageLabel } from '../state/app';
+import { setFlusher } from '../state/editorBridge';
+import { BlockHandle } from './BlockHandle';
+import { SelectionToolbar } from './SelectionToolbar';
+import { SlashMenu } from './SlashMenu';
 
 type SaveState = 'saved' | 'saving' | 'error';
 
@@ -48,6 +52,7 @@ function Surface({ page, initial }: { page: Page; initial: Document }) {
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const dirty = useRef(false);
   const pending = useRef<() => Promise<void>>(undefined);
+  const inner = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
     extensions,
@@ -76,27 +81,34 @@ function Surface({ page, initial }: { page: Page; initial: Document }) {
     },
   });
 
-  // Flush unsaved edits when leaving the page or closing the window.
+  // Flush unsaved edits when leaving the page, closing the window, or when another feature
+  // (export) needs the latest content on disk.
   useEffect(() => {
-    const flush = () => {
+    const flush = async () => {
       clearTimeout(timer.current);
-      if (dirty.current) void pending.current?.();
+      if (dirty.current) await pending.current?.();
     };
-    window.addEventListener('beforeunload', flush);
-    window.addEventListener('blur', flush);
+    setFlusher(flush);
+    const onLeave = () => void flush();
+    window.addEventListener('beforeunload', onLeave);
+    window.addEventListener('blur', onLeave);
     return () => {
-      window.removeEventListener('beforeunload', flush);
-      window.removeEventListener('blur', flush);
-      flush();
+      window.removeEventListener('beforeunload', onLeave);
+      window.removeEventListener('blur', onLeave);
+      void flush();
+      setFlusher(null);
     };
   }, []);
 
   return (
     <article className="page" aria-label={pageLabel(page)}>
-      <div className="page-inner">
+      <div className="page-inner" ref={inner}>
+        <BlockHandle editor={editor} container={inner} />
         <TitleField page={page} onEnter={() => editor?.commands.focus('start')} />
         <EditorContent editor={editor} />
       </div>
+      <SelectionToolbar editor={editor} />
+      <SlashMenu />
       <div className="save-state" role="status" aria-live="polite">
         {save === 'saving' && 'Saving…'}
         {save === 'saved' && 'Saved'}
@@ -111,6 +123,15 @@ function TitleField({ page, onEnter }: { page: Page; onEnter: () => void }) {
   const latest = useRef(value);
   latest.current = value;
   const saved = useRef(page.title);
+  const field = useRef<HTMLTextAreaElement>(null);
+
+  // Grow with content so long titles wrap instead of being clipped.
+  useEffect(() => {
+    const el = field.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, [value]);
 
   // External renames (sidebar) update the field unless it holds unsaved typing.
   useEffect(() => {
@@ -133,12 +154,14 @@ function TitleField({ page, onEnter }: { page: Page; onEnter: () => void }) {
           {page.icon}
         </span>
       )}
-      <input
+      <textarea
+        ref={field}
         className="title"
+        rows={1}
         value={value}
         placeholder="Untitled"
         aria-label="Page title"
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value.replace(/\n/g, ' '))}
         onBlur={commit}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

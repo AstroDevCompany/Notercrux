@@ -5,6 +5,7 @@ use tauri::Manager;
 
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             let dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&dir)?;
@@ -26,6 +27,8 @@ pub fn run() {
             commands::load_document,
             commands::save_document,
             commands::search_pages,
+            commands::export_file,
+            commands::import_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Notercrux");

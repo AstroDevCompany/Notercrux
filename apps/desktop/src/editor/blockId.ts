@@ -3,6 +3,7 @@ import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { newId } from '@notercrux/document-model';
 
 const TYPES = [
+  'callout',
   'paragraph',
   'heading',
   'listItem',

@@ -49,3 +49,15 @@ crates/crypto + crates/sync: spikes, tested in isolation, not yet wired into the
 Tokens (`styles/tokens.css`) → materials (`styles/glass.css`) → components. Components use tokens,
 never literal colours. Overlays use `Dialog`/`useDialog` (focus trap, Escape, focus restore). The
 page tree follows the ARIA tree pattern with roving tab index.
+
+## Portable formats
+
+Export/import is implemented in TypeScript (`packages/document-model/src/markdown.ts`) on the
+canonical `Document`. File access goes through two Rust commands, `export_file` and `import_file`,
+which open the native dialog themselves so the webview never chooses a path; imports are limited to
+10 MB. JSON is lossless; Markdown is a documented lossy subset.
+
+## Moving pages
+
+`actions.place(id, target, before|after|inside)` converts drag-and-drop and keyboard moves into
+`move_page(parent, index)`. Cycle prevention is enforced by the backend, not only the UI.

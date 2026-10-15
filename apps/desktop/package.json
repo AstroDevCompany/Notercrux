@@ -12,6 +12,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
     "@notercrux/document-model": "workspace:*",
     "@tauri-apps/api": "^2.12.0",
     "@tiptap/core": "^3.32.0",
@@ -19,6 +20,7 @@
     "@tiptap/pm": "^3.32.0",
     "@tiptap/react": "^3.32.0",
     "@tiptap/starter-kit": "^3.32.0",
+    "@tiptap/suggestion": "^3.32.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

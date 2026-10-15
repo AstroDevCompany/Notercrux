@@ -26,6 +26,13 @@ function commands(): Item[] {
       run: () => void actions.createPage(null),
     },
     {
+      id: 'import',
+      group: 'Actions',
+      label: 'Import Markdown or JSON file…',
+      icon: 'page',
+      run: () => void actions.importFile(),
+    },
+    {
       id: 'settings',
       group: 'Actions',
       label: 'Open settings',
@@ -99,6 +106,20 @@ function commands(): Item[] {
         label: 'Duplicate current page',
         icon: 'copy',
         run: () => void actions.duplicate(currentId),
+      },
+      {
+        id: 'export-md',
+        group: 'Actions',
+        label: 'Export page as Markdown…',
+        icon: 'copy',
+        run: () => void actions.exportPage(currentId, 'md'),
+      },
+      {
+        id: 'export-json',
+        group: 'Actions',
+        label: 'Export page as JSON (lossless)…',
+        icon: 'copy',
+        run: () => void actions.exportPage(currentId, 'json'),
       },
       {
         id: 'archive',

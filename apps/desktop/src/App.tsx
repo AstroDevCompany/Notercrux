@@ -15,6 +15,7 @@ export default function App() {
   const pages = useApp((s) => s.pages);
   const currentId = useApp((s) => s.currentId);
   const error = useApp((s) => s.error);
+  const notice = useApp((s) => s.notice);
   const page = pages.find((p) => p.id === currentId && !p.archivedAt);
 
   useEffect(() => void actions.init(), []);
@@ -60,6 +61,23 @@ export default function App() {
           <span>{error}</span>
           <button className="btn" onClick={() => actions.dismissError()}>
             Dismiss
+          </button>
+        </div>
+      )}
+      {notice && (
+        <div className="toast glass-popover" role="status">
+          <div>
+            <div>{notice.text}</div>
+            {notice.details.length > 0 && (
+              <ul className="toast-details">
+                {notice.details.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <button className="btn" onClick={() => actions.dismissNotice()}>
+            OK
           </button>
         </div>
       )}

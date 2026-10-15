@@ -1,6 +1,14 @@
 import { useSyncExternalStore } from 'react';
-import type { Page } from '@notercrux/document-model';
+import {
+  documentToMarkdown,
+  markdownToDocument,
+  pageFromJson,
+  pageToJson,
+  type Page,
+} from '@notercrux/document-model';
 import { api } from '../api';
+import { pickTextFile, saveTextFile } from '../lib/files';
+import { flushEditor } from './editorBridge';
 
 export interface ConfirmRequest {
   title: string;
@@ -21,6 +29,7 @@ interface AppState {
   /** Page whose title is being edited in the sidebar. */
   renamingId: string | null;
   error: string | null;
+  notice: { text: string; details: string[] } | null;
   loaded: boolean;
 }
 
@@ -52,6 +61,7 @@ let state: AppState = {
   confirm: null,
   renamingId: null,
   error: null,
+  notice: null,
   loaded: false,
 };
 const listeners = new Set<() => void>();
@@ -149,6 +159,90 @@ export const actions = {
     await guard(() => api.movePage(id, parentId, index));
     await actions.refresh();
   },
+  /**
+   * Moves a page next to (or inside) another. Index arithmetic uses all siblings, archived ones
+   * included, because that is how the backend numbers positions.
+   */
+  async place(id: string, targetId: string, where: 'before' | 'after' | 'inside') {
+    const { pages } = state;
+    const target = pages.find((p) => p.id === targetId);
+    if (!target || id === targetId) return;
+    if (where === 'inside') {
+      actions.toggleExpanded(targetId, true);
+      const n = childrenOf(pages, targetId).filter((p) => p.id !== id).length;
+      return actions.move(id, targetId, n);
+    }
+    const sibs = childrenOf(pages, target.parentId).filter((p) => p.id !== id);
+    const at = sibs.findIndex((p) => p.id === targetId) + (where === 'after' ? 1 : 0);
+    return actions.move(id, target.parentId, at);
+  },
+  /** Keyboard alternatives to drag-and-drop. */
+  async shift(id: string, how: 'up' | 'down' | 'indent' | 'outdent') {
+    const { pages } = state;
+    const page = pages.find((p) => p.id === id);
+    if (!page) return;
+    const sibs = live(childrenOf(pages, page.parentId));
+    const i = sibs.findIndex((p) => p.id === id);
+    if (how === 'up' && i > 0) return actions.place(id, sibs[i - 1]!.id, 'before');
+    if (how === 'down' && i < sibs.length - 1) return actions.place(id, sibs[i + 1]!.id, 'after');
+    if (how === 'indent' && i > 0) return actions.place(id, sibs[i - 1]!.id, 'inside');
+    if (how === 'outdent' && page.parentId) return actions.place(id, page.parentId, 'after');
+  },
+  async exportPage(id: string, format: 'md' | 'json') {
+    await flushEditor();
+    const page = state.pages.find((p) => p.id === id);
+    if (!page) return;
+    const doc = await guard(() => api.loadDocument(id));
+    if (!doc) return;
+    const title = pageLabel(page);
+    const md = format === 'md' ? documentToMarkdown(page.title, doc) : null;
+    const text = md ? md.value : pageToJson(page.title, page.icon, doc);
+    const saved = await guard(() => saveTextFile(title, format, text));
+    if (saved) {
+      set({
+        notice: {
+          text: `Exported “${title}” as ${format === 'md' ? 'Markdown' : 'JSON'}.`,
+          details: md?.warnings ?? [],
+        },
+      });
+    }
+  },
+  async importFile() {
+    const file = await guard(() => pickTextFile());
+    if (!file) return;
+    try {
+      const isJson = /\.json$/i.test(file.name) || file.contents.trimStart().startsWith('{');
+      let title: string;
+      let icon: string | null = null;
+      let document;
+      let warnings: string[] = [];
+      if (isJson) {
+        const parsed = pageFromJson(file.contents);
+        ({ title, icon, document } = parsed);
+      } else {
+        const md = markdownToDocument(file.contents);
+        title = md.value.title ?? file.name.replace(/\.[^.]+$/, '');
+        document = md.value.document;
+        warnings = md.warnings;
+      }
+      const page = await api.createPage(null, title);
+      if (icon) await api.setPageIcon(page.id, icon);
+      await api.saveDocument(page.id, document);
+      await actions.refresh();
+      actions.select(page.id);
+      set({
+        notice: {
+          text: `Imported “${title || 'Untitled'}”${warnings.length ? ` with ${warnings.length} note${warnings.length > 1 ? 's' : ''}` : ''}.`,
+          details: warnings,
+        },
+      });
+    } catch (e) {
+      set({
+        error: `Could not import ${file.name}: ${e instanceof Error ? e.message : String(e)}`,
+      });
+    }
+  },
+  dismissNotice: () => set({ notice: null }),
   setPalette: (paletteOpen: boolean) => set({ paletteOpen }),
   setSettings: (settingsOpen: boolean) => set({ settingsOpen }),
   toggleSidebar: () => set({ sidebarOpen: !state.sidebarOpen }),
