@@ -1,0 +1,26 @@
+{
+  "name": "notercrux",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "pnpm --filter @notercrux/desktop tauri dev",
+    "build": "pnpm --filter @notercrux/desktop tauri build",
+    "web": "pnpm --filter @notercrux/desktop dev",
+    "test": "pnpm -r --if-present test && cargo test --workspace",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "eslint . && cargo clippy --workspace --all-targets -- -D warnings",
+    "format": "prettier --write . && cargo fmt --all",
+    "format:check": "prettier --check . && cargo fmt --all --check"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.9.0",
+    "typescript": "~5.9.0",
+    "typescript-eslint": "^8.40.0"
+  }
+}

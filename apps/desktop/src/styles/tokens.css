@@ -1,0 +1,99 @@
+/* Design tokens. Components never hard-code colors: they use these variables.
+   Light and dark are tuned separately, not inverted. */
+:root {
+  --font-ui:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI Variable Text', 'Segoe UI',
+    system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --sidebar-width: 264px;
+  --toolbar-height: 52px;
+  --target: 28px; /* minimum interactive size for icon buttons */
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 140ms;
+
+  color-scheme: light;
+  --text: #1c1c1f;
+  --text-2: rgba(28, 28, 31, 0.64);
+  --text-3: rgba(28, 28, 31, 0.42);
+  --accent: #5865f2;
+  --accent-text: #fff;
+  --accent-soft: rgba(88, 101, 242, 0.14);
+  --danger: #d6324a;
+  --hover: rgba(20, 20, 40, 0.06);
+  --selected: rgba(88, 101, 242, 0.16);
+  --hairline: rgba(20, 20, 40, 0.1);
+  --focus: #3b6cff;
+
+  /* Solid fallbacks (also used when transparency is reduced). */
+  --solid-window: #f4f4f7;
+  --solid-sidebar: #ececf1;
+  --solid-content: #ffffff;
+  --solid-overlay: #ffffff;
+
+  /* Glass materials: background, blur radius, edge, shadow. */
+  --mat-sidebar-bg: rgba(246, 246, 250, 0.5);
+  --mat-sidebar-blur: 28px;
+  --mat-content-bg: rgba(255, 255, 255, 0.86);
+  --mat-overlay-bg: rgba(252, 252, 255, 0.72);
+  --mat-overlay-blur: 34px;
+  --mat-popover-bg: rgba(252, 252, 255, 0.78);
+  --mat-popover-blur: 26px;
+  --mat-edge: rgba(255, 255, 255, 0.65);
+  --mat-edge-outer: rgba(20, 20, 40, 0.12);
+  --mat-shadow: 0 18px 60px rgba(20, 24, 60, 0.22), 0 2px 10px rgba(20, 24, 60, 0.1);
+  --scrim: rgba(20, 22, 40, 0.18);
+  --code-bg: rgba(20, 20, 40, 0.06);
+  --browser-backdrop: linear-gradient(135deg, #c9d4ff 0%, #e8d8ff 45%, #ffe1d6 100%);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --text: #f1f1f5;
+  --text-2: rgba(241, 241, 245, 0.66);
+  --text-3: rgba(241, 241, 245, 0.42);
+  --accent: #8a94ff;
+  --accent-text: #11122a;
+  --accent-soft: rgba(138, 148, 255, 0.18);
+  --danger: #ff6b81;
+  --hover: rgba(255, 255, 255, 0.07);
+  --selected: rgba(138, 148, 255, 0.22);
+  --hairline: rgba(255, 255, 255, 0.1);
+  --focus: #8fb0ff;
+
+  --solid-window: #1b1b21;
+  --solid-sidebar: #232329;
+  --solid-content: #1d1d23;
+  --solid-overlay: #2a2a32;
+
+  --mat-sidebar-bg: rgba(30, 30, 38, 0.42);
+  --mat-content-bg: rgba(28, 28, 34, 0.86);
+  --mat-overlay-bg: rgba(40, 40, 50, 0.66);
+  --mat-popover-bg: rgba(44, 44, 54, 0.74);
+  --mat-edge: rgba(255, 255, 255, 0.14);
+  --mat-edge-outer: rgba(0, 0, 0, 0.5);
+  --mat-shadow: 0 22px 70px rgba(0, 0, 0, 0.55), 0 2px 12px rgba(0, 0, 0, 0.35);
+  --scrim: rgba(0, 0, 0, 0.32);
+  --code-bg: rgba(255, 255, 255, 0.08);
+  --browser-backdrop: linear-gradient(135deg, #2b2f55 0%, #3a2a55 50%, #4a2f3a 100%);
+}
+
+/* Reduced transparency: every surface becomes opaque and blur is removed. */
+:root[data-transparency='reduced'] {
+  --mat-sidebar-bg: var(--solid-sidebar);
+  --mat-content-bg: var(--solid-content);
+  --mat-overlay-bg: var(--solid-overlay);
+  --mat-popover-bg: var(--solid-overlay);
+  --mat-sidebar-blur: 0px;
+  --mat-overlay-blur: 0px;
+  --mat-popover-blur: 0px;
+  --scrim: rgba(0, 0, 0, 0.35);
+}
+
+:root[data-motion='reduced'] {
+  --dur: 0ms;
+}

@@ -1,0 +1,12 @@
+[package]
+name = "notercrux-storage"
+description = "SQLite persistence for pages and documents."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+notercrux-domain = { path = "../domain" }
+rusqlite.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true

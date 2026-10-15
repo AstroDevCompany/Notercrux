@@ -1,0 +1,12 @@
+[package]
+name = "notercrux-sync"
+description = "CRDT-based document merging and an encrypted-relay sync protocol (technical spike)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+notercrux-crypto = { path = "../crypto" }
+loro = "1.16"
+sha2 = "0.10"
+thiserror.workspace = true

@@ -1,0 +1,61 @@
+/* The reusable glass material system. Three materials cover every floating or navigation surface:
+   .glass-sidebar  – persistent navigation
+   .glass-overlay  – modal surfaces (palette, dialogs, settings)
+   .glass-popover  – transient surfaces (menus, toasts, tooltips)
+   Only these classes use backdrop-filter, so blur cost is bounded and tunable in tokens.css. */
+
+.glass-sidebar {
+  background: var(--mat-sidebar-bg);
+  -webkit-backdrop-filter: blur(var(--mat-sidebar-blur)) saturate(1.5);
+  backdrop-filter: blur(var(--mat-sidebar-blur)) saturate(1.5);
+  border-right: 1px solid var(--hairline);
+}
+
+.glass-overlay,
+.glass-popover {
+  position: relative;
+  border-radius: var(--radius-lg);
+  box-shadow:
+    var(--mat-shadow),
+    0 0 0 0.5px var(--mat-edge-outer);
+}
+.glass-overlay {
+  background: var(--mat-overlay-bg);
+  -webkit-backdrop-filter: blur(var(--mat-overlay-blur)) saturate(1.7);
+  backdrop-filter: blur(var(--mat-overlay-blur)) saturate(1.7);
+}
+.glass-popover {
+  background: var(--mat-popover-bg);
+  -webkit-backdrop-filter: blur(var(--mat-popover-blur)) saturate(1.6);
+  backdrop-filter: blur(var(--mat-popover-blur)) saturate(1.6);
+  border-radius: var(--radius-md);
+}
+/* Specular edge: a 1px inner highlight that sells the glass without extra layers. */
+.glass-overlay::before,
+.glass-popover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, var(--mat-edge), transparent 55%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+:root[data-transparency='reduced'] .glass-overlay::before,
+:root[data-transparency='reduced'] .glass-popover::before {
+  display: none;
+}
+:root[data-transparency='reduced'] .glass-overlay,
+:root[data-transparency='reduced'] .glass-popover {
+  box-shadow:
+    var(--mat-shadow),
+    0 0 0 1px var(--hairline);
+}

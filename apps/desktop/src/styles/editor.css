@@ -1,0 +1,101 @@
+.prose {
+  outline: none;
+  line-height: 1.65;
+  font-size: 16px;
+  min-height: 50vh;
+  caret-color: var(--accent);
+}
+.prose > * + * {
+  margin-top: 0.55em;
+}
+.prose p {
+  margin: 0;
+}
+.prose p.is-empty:first-child::before,
+.prose p:only-child:empty::before {
+  content: none;
+}
+.prose h1,
+.prose h2,
+.prose h3 {
+  margin: 1.1em 0 0.3em;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+.prose h1 {
+  font-size: 1.9em;
+}
+.prose h2 {
+  font-size: 1.5em;
+}
+.prose h3 {
+  font-size: 1.2em;
+}
+.prose ul,
+.prose ol {
+  margin: 0.2em 0;
+  padding-left: 1.5em;
+}
+.prose li > p {
+  margin: 0;
+}
+.prose ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 0.2em;
+}
+.prose ul[data-type='taskList'] li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.prose ul[data-type='taskList'] li > label {
+  margin-top: 0.28em;
+}
+.prose ul[data-type='taskList'] li > label input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+.prose ul[data-type='taskList'] li[data-checked='true'] > div {
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+.prose ul[data-type='taskList'] li > div {
+  flex: 1;
+}
+.prose blockquote {
+  margin-left: 0;
+  padding: 2px 0 2px 16px;
+  border-left: 3px solid var(--accent);
+  color: var(--text-2);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+  background: var(--code-bg);
+}
+.prose pre {
+  margin: 0.8em 0;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: var(--code-bg);
+  overflow-x: auto;
+}
+.prose pre code {
+  padding: 0;
+  background: none;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  margin: 1.4em 0;
+}
+.prose a {
+  color: var(--accent);
+  text-underline-offset: 2px;
+}
+.prose ::selection {
+  background: var(--accent-soft);
+}
