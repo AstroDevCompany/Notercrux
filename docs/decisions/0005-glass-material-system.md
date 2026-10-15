@@ -24,3 +24,17 @@ Verified: CSS materials in a browser (light/dark), reduced-transparency tokens b
 **Not yet verified:** the native macOS vibrancy and Windows Mica windows, Windows rendering of
 `backdrop-filter` in WebView2, and performance with many stacked panels. See
 `docs/development/testing.md`.
+
+## Addendum — what `backdrop-filter` can and cannot blur
+
+`backdrop-filter` only blurs **web content** behind an element, never the native window material
+(macOS vibrancy, Windows Mica) behind the webview. In the native app a menu over the sidebar
+therefore has nothing to blur and looks merely see-through. Consequences, applied in Phase 3:
+
+- Floating surfaces (menus, popovers, palette, dialogs) use higher-opacity fills (about 0.9) so they
+  stay legible and read as frosted where web content is behind them, instead of relying on blur.
+- The sidebar drops its (no-op) `backdrop-filter` in the native app and relies on the native
+  material alone; the filter remains in the browser preview.
+- Menu item highlighting follows the pointer through focus, not CSS `:hover`, because WebKit may not
+  repaint `:hover` inside composited, filtered layers. This is a reasoned fix for a reported
+  symptom; it has **not** been verified in the native window.

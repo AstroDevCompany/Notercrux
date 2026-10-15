@@ -44,11 +44,49 @@ Open the command palette (`⌘/Ctrl+K`):
   Tables, images, HTML and headings deeper than level 3 are not supported: they are imported as
   plain text or links, and the notes shown after import say what was affected.
 
-## Appearance
+## Navigation and search
 
-Settings (`⌘/Ctrl+,`): theme, glass effects (reduced transparency uses solid surfaces) and motion.
-Each defaults to following your system.
+- **Command palette** (`⌘/Ctrl+K`): with nothing typed it lists commands and your recent pages.
+  Type to search page titles _and_ page content; results from content show a highlighted excerpt.
+  Choose **Create page “…”** to make a page from what you typed.
+- **Back / forward:** the arrows in the top bar, or `⌘/Ctrl+[` and `⌘/Ctrl+]`. Pages that were
+  archived or deleted are skipped.
+- **Breadcrumbs** at the top show where a page lives; click a parent to open it.
+- **Sidebar keyboard:** arrows move, `→`/`←` expand/collapse, `Enter` opens, `F2` renames,
+  `Delete` archives, `Alt+arrows` move pages, the context-menu key opens actions. `⌘/Ctrl+\`
+  toggles the sidebar.
+
+## Page links
+
+Type `[[` in a page and pick a page (or create a new one) to insert a link. Click a link to open
+the page. Links follow the page even if it is renamed or moved, but the visible text keeps the title
+it had when you inserted it. Every page lists the pages that link to it under **Linked from**.
+
+## Databases
+
+Create one with the table button next to **Pages** in the sidebar (or **New database** in the
+palette). A database is a table of records; each record is a page you can open and write in.
+
+- **Properties** (columns): text, number, select, multi-select, date, checkbox, URL and relation
+  (links to records of another database). Add, rename, retype, hide or delete them under
+  **Properties**; select options are edited there too. Changing a property's type or deleting it
+  clears its values, and you are asked first.
+- **Filter** and **Sort** apply to the current **view**. Filters can match all or any condition;
+  select columns sort in the order of their options; empty values always sort last. Use **+** next
+  to the view tabs for more views (double-click a tab to rename it, right-click to delete).
+- Edit cells in place. **Open** (on row hover) opens the record as a page, with its properties above
+  the content. Records cannot be moved to another database.
+
+## Appearance and settings
+
+Settings (`⌘/Ctrl+,`):
+
+- **Appearance:** theme, accent color, glass effects (reduced transparency uses solid surfaces) and
+  motion. Theme, glass and motion default to following your system.
+- **Pages:** typeface (sans, serif, mono), text size and page width.
+- **Keyboard shortcuts:** click a shortcut, then press the new keys. A shortcut must include
+  ⌘/Ctrl or Alt, and one already in use is refused. Editor shortcuts and sidebar keys are fixed.
 
 ## Not available yet
 
-Tables, images and file attachments, page links, bulk export/import, databases, sync, encryption.
+Editor tables, images and file attachments, bulk export/import, two-way relations, formulas, sync, encryption.

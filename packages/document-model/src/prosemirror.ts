@@ -22,7 +22,15 @@ export class UnsupportedContentError extends Error {
   }
 }
 
-const SUPPORTED_MARKS = new Set(['bold', 'italic', 'strike', 'code', 'underline', 'link']);
+const SUPPORTED_MARKS = new Set([
+  'bold',
+  'italic',
+  'strike',
+  'code',
+  'underline',
+  'link',
+  'pageLink',
+]);
 
 // ---- ProseMirror -> Document -------------------------------------------------------------------
 

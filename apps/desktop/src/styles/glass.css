@@ -59,3 +59,13 @@
     var(--mat-shadow),
     0 0 0 1px var(--hairline);
 }
+
+/* backdrop-filter can only blur web content, never the native window material behind the webview
+   (macOS vibrancy / Windows Mica). Over the sidebar there is therefore nothing to blur, so in the
+   native app the sidebar relies on the native material alone, and floating surfaces use fills that
+   stay legible when nothing is behind them to blur. The filter is kept in the browser preview,
+   where the page backdrop is web content. */
+:root[data-native='true'] .glass-sidebar {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}

@@ -1,4 +1,5 @@
-import { actions, breadcrumb, pageLabel, useApp } from '../state/app';
+import { actions, breadcrumb, canGo, pageLabel, useApp } from '../state/app';
+import { formatBinding, useBindings } from '../state/shortcuts';
 import { Icon } from './Icon';
 
 /** Top bar of the content area. Doubles as the window drag region on the native app. */
@@ -6,6 +7,8 @@ export function Toolbar() {
   const pages = useApp((s) => s.pages);
   const currentId = useApp((s) => s.currentId);
   const sidebarOpen = useApp((s) => s.sidebarOpen);
+  const history = useApp((s) => s.history);
+  const bindings = useBindings();
   const trail = currentId ? breadcrumb(pages, currentId) : [];
 
   return (
@@ -19,6 +22,24 @@ export function Toolbar() {
         onClick={() => actions.toggleSidebar()}
       >
         <Icon name="sidebar" size={17} />
+      </button>
+      <button
+        className="icon-btn"
+        aria-label="Go back"
+        title={`Back (${formatBinding(bindings.back)})`}
+        disabled={!canGo({ history }, -1)}
+        onClick={() => actions.go(-1)}
+      >
+        <Icon name="back" size={17} />
+      </button>
+      <button
+        className="icon-btn"
+        aria-label="Go forward"
+        title={`Forward (${formatBinding(bindings.forward)})`}
+        disabled={!canGo({ history }, 1)}
+        onClick={() => actions.go(1)}
+      >
+        <Icon name="forward" size={17} />
       </button>
       <nav aria-label="Breadcrumb" className="crumbs" data-tauri-drag-region>
         <ol>
@@ -34,7 +55,7 @@ export function Toolbar() {
                   {p.icon} {pageLabel(p)}
                 </span>
               ) : (
-                <button className="crumb" onClick={() => actions.select(p.id)}>
+                <button className="crumb" onClick={() => actions.open(p.id)}>
                   {p.icon} {pageLabel(p)}
                 </button>
               )}

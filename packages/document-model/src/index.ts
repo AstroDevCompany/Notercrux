@@ -7,5 +7,7 @@ export {
   pageToJson,
   pageFromJson,
   type Converted,
+  PAGE_LINK_PREFIX,
   type PageExport,
 } from './markdown';
+export * from './database';

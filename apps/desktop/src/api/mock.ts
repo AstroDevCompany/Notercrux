@@ -1,22 +1,43 @@
-import { newId, type Document, type Page } from '@notercrux/document-model';
-import type { Api } from './types';
+import {
+  defaultSchema,
+  newId,
+  TITLE_PROPERTY,
+  validateValue,
+  isEmptyValue,
+  type DatabaseSchema,
+  type DbRecord,
+  type Document,
+  type Page,
+} from '@notercrux/document-model';
+import type { Api, SearchHit } from './types';
 
 /**
- * localStorage-backed stand-in used when the UI runs in a plain browser (`pnpm web`) so the
- * interface can be developed and tested without the native shell. Not a source of truth for
- * behavior: the Rust `storage` crate is.
+ * localStorage-backed stand-in used when the UI runs in a plain browser (`pnpm web`) and in unit
+ * tests, so the interface can be developed without the native shell. It mirrors the rules of the
+ * Rust `storage` crate but is NOT the source of truth for behavior: the Rust crate is.
  */
 const KEY = 'notercrux.mock.v1';
 
 interface Data {
   pages: Page[];
   docs: Record<string, Document>;
+  schemas: Record<string, DatabaseSchema>;
+  /** pageId -> propertyId -> value */
+  props: Record<string, Record<string, unknown>>;
 }
 
 function load(): Data {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw) as Data;
+    if (raw) {
+      const d = JSON.parse(raw) as Partial<Data>;
+      return {
+        pages: (d.pages ?? []).map((p) => ({ ...p, kind: p.kind ?? 'page' })),
+        docs: d.docs ?? {},
+        schemas: d.schemas ?? {},
+        props: d.props ?? {},
+      };
+    }
   } catch {
     /* fall through to seed */
   }
@@ -29,6 +50,7 @@ function load(): Data {
   ): Page => ({
     id: newId(),
     parentId,
+    kind: 'page',
     title,
     icon,
     position,
@@ -50,6 +72,8 @@ function load(): Data {
         ],
       },
     },
+    schemas: {},
+    props: {},
   };
 }
 
@@ -73,6 +97,62 @@ const find = (id: string) => {
   if (!p) throw new Error(`page ${id} not found`);
   return p;
 };
+const isDb = (id: string | null) =>
+  !!id && data.pages.find((p) => p.id === id)?.kind === 'database';
+
+function validateSchema(s: DatabaseSchema) {
+  const ids = new Set<string>();
+  for (const p of s.properties) {
+    if (!p.name.trim()) throw new Error('property names must not be empty');
+    if (p.id === TITLE_PROPERTY || ids.has(p.id)) throw new Error(`duplicate id “${p.id}”`);
+    ids.add(p.id);
+    if (p.type === 'relation' && !p.relationDatabase)
+      throw new Error(`property “${p.name}” is a relation without a target database`);
+  }
+  if (!s.views.length) throw new Error('a database needs at least one view');
+  for (const v of s.views) {
+    for (const r of [
+      ...v.sorts.map((x) => x.property),
+      ...v.filters.map((x) => x.property),
+      ...v.hidden,
+    ]) {
+      if (r !== TITLE_PROPERTY && !ids.has(r))
+        throw new Error(`“${r}” refers to a property that does not exist`);
+    }
+  }
+}
+
+const linkTargets = (doc: Document | undefined): Set<string> => {
+  const out = new Set<string>();
+  const walk = (blocks: Document['blocks']) => {
+    for (const b of blocks) {
+      for (const m of b.marks ?? [])
+        if (m.type === 'pageLink' && typeof m.attrs?.pageId === 'string') out.add(m.attrs.pageId);
+      walk(b.children ?? []);
+    }
+  };
+  walk(doc?.blocks ?? []);
+  return out;
+};
+
+const bodyOf = (p: Page) => (data.docs[p.id]?.blocks ?? []).map((b) => b.text).join('\n');
+
+function snippet(body: string, words: string[]): string {
+  const lower = body.toLowerCase();
+  const at = words
+    .map((w) => lower.indexOf(w))
+    .filter((i) => i >= 0)
+    .sort((a, b) => a - b)[0];
+  if (at === undefined) return body.slice(0, 90);
+  const from = Math.max(0, at - 40);
+  let out = body.slice(from, at + 90);
+  for (const w of words)
+    out = out.replace(
+      new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+      (m) => `\u0001${m}\u0002`,
+    );
+  return (from > 0 ? '…' : '') + out + (at + 90 < body.length ? '…' : '');
+}
 
 export const mockApi: Api = {
   async listPages() {
@@ -83,6 +163,7 @@ export const mockApi: Api = {
     const page: Page = {
       id: newId(),
       parentId,
+      kind: 'page',
       title,
       icon: null,
       position: siblings(parentId).length,
@@ -108,6 +189,9 @@ export const mockApi: Api = {
     }
     const page = find(id);
     const old = page.parentId;
+    if (old !== newParentId && (isDb(old) || isDb(newParentId))) {
+      throw new Error('Records cannot be moved into or out of a database.');
+    }
     page.parentId = newParentId;
     const list = siblings(newParentId).filter((p) => p.id !== id);
     list.splice(Math.min(index, list.length), 0, page);
@@ -121,16 +205,19 @@ export const mockApi: Api = {
     const now = Date.now();
     for (const old of ids) {
       const p = find(old);
+      const nid = map.get(old)!;
       data.pages.push({
         ...p,
-        id: map.get(old)!,
+        id: nid,
         parentId: old === id ? p.parentId : map.get(p.parentId!)!,
         title: old === id ? `${p.title} (copy)` : p.title,
         position: old === id ? p.position + 1 : p.position,
         createdAt: now,
         updatedAt: now,
       });
-      if (data.docs[old]) data.docs[map.get(old)!] = structuredClone(data.docs[old]);
+      if (data.docs[old]) data.docs[nid] = structuredClone(data.docs[old]);
+      if (data.schemas[old]) data.schemas[nid] = structuredClone(data.schemas[old]);
+      if (data.props[old]) data.props[nid] = structuredClone(data.props[old]);
     }
     const copy = find(map.get(id)!);
     const list = siblings(copy.parentId).filter((p) => p.id !== copy.id);
@@ -156,7 +243,11 @@ export const mockApi: Api = {
   async deletePage(id) {
     const ids = new Set(subtree(id));
     data.pages = data.pages.filter((p) => !ids.has(p.id));
-    for (const i of ids) delete data.docs[i];
+    for (const i of ids) {
+      delete data.docs[i];
+      delete data.schemas[i];
+      delete data.props[i];
+    }
     save();
   },
   async loadDocument(id) {
@@ -167,13 +258,87 @@ export const mockApi: Api = {
     find(id).updatedAt = Date.now();
     save();
   },
-  async searchPages(query) {
+  async searchPages(query): Promise<SearchHit[]> {
     const words = query.toLowerCase().split(/\s+/).filter(Boolean);
     if (!words.length) return [];
-    const text = (p: Page) =>
-      `${p.title} ${(data.docs[p.id]?.blocks ?? []).map((b) => b.text).join(' ')}`.toLowerCase();
     return data.pages
-      .filter((p) => !p.archivedAt && words.every((w) => text(p).includes(w)))
-      .slice(0, 20);
+      .filter((p) => {
+        if (p.archivedAt) return false;
+        const text = `${p.title} ${bodyOf(p)}`.toLowerCase();
+        // Prefix match on word starts, like the FTS index.
+        return words.every((w) =>
+          new RegExp(`(^|[^\\p{L}\\p{N}])${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'u').test(
+            text,
+          ),
+        );
+      })
+      .slice(0, 20)
+      .map((page) => ({ page: structuredClone(page), snippet: snippet(bodyOf(page), words) }));
+  },
+  async backlinks(id) {
+    return data.pages
+      .filter((p) => !p.archivedAt && p.id !== id && linkTargets(data.docs[p.id]).has(id))
+      .map((p) => structuredClone(p));
+  },
+
+  async createDatabase(parentId, title) {
+    const page = await mockApi.createPage(parentId, title);
+    find(page.id).kind = 'database';
+    data.schemas[page.id] = defaultSchema();
+    save();
+    return structuredClone(find(page.id));
+  },
+  async getSchema(id) {
+    const s = data.schemas[id];
+    if (!s) throw new Error(`page ${id} is not a database`);
+    return structuredClone(s);
+  },
+  async setSchema(id, schema) {
+    const old = data.schemas[id];
+    if (!old) throw new Error(`page ${id} is not a database`);
+    validateSchema(schema);
+    const records = data.pages.filter((p) => p.parentId === id);
+    for (const op of old.properties) {
+      const np = schema.properties.find((p) => p.id === op.id);
+      const stale = !np || np.type !== op.type || np.relationDatabase !== op.relationDatabase;
+      for (const r of records) {
+        const vals = data.props[r.id];
+        if (!vals || !(op.id in vals)) continue;
+        if (stale) {
+          delete vals[op.id];
+        } else if (np.type === 'select' || np.type === 'multiSelect') {
+          const keep = (x: unknown) => np.options?.some((o) => o.id === x);
+          const v = vals[op.id];
+          const cleaned = Array.isArray(v) ? v.filter(keep) : keep(v) ? v : null;
+          if (isEmptyValue(cleaned)) delete vals[op.id];
+          else vals[op.id] = cleaned;
+        }
+      }
+    }
+    data.schemas[id] = structuredClone(schema);
+    save();
+  },
+  async listRecords(id): Promise<DbRecord[]> {
+    if (!data.schemas[id]) throw new Error(`page ${id} is not a database`);
+    return siblings(id)
+      .filter((p) => !p.archivedAt)
+      .map((p) => ({ page: structuredClone(p), values: structuredClone(data.props[p.id] ?? {}) }));
+  },
+  async setProperty(pageId, propertyId, value) {
+    const page = find(pageId);
+    const schema = page.parentId ? data.schemas[page.parentId] : undefined;
+    if (!schema) throw new Error(`page ${pageId} is not a record of a database`);
+    const prop = schema.properties.find((p) => p.id === propertyId);
+    if (!prop) throw new Error(`“${propertyId}” refers to a property that does not exist`);
+    const problem = validateValue(prop, value);
+    if (problem) throw new Error(problem);
+    const vals = (data.props[pageId] ??= {});
+    if (isEmptyValue(value)) delete vals[propertyId];
+    else vals[propertyId] = structuredClone(value);
+    page.updatedAt = Date.now();
+    save();
+  },
+  async getProperties(pageId) {
+    return structuredClone(data.props[pageId] ?? {});
   },
 };

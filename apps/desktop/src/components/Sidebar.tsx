@@ -16,14 +16,24 @@ export function Sidebar() {
       </button>
       <div className="sidebar-section-head">
         <span>Pages</span>
-        <button
-          className="icon-btn"
-          aria-label="New page"
-          title={`New page (${mod}N)`}
-          onClick={() => void actions.createPage(null)}
-        >
-          <Icon name="plus" size={15} />
-        </button>
+        <span className="head-actions">
+          <button
+            className="icon-btn"
+            aria-label="New database"
+            title="New database"
+            onClick={() => void actions.createDatabase(null)}
+          >
+            <Icon name="table" size={15} />
+          </button>
+          <button
+            className="icon-btn"
+            aria-label="New page"
+            title={`New page (${mod}N)`}
+            onClick={() => void actions.createPage(null)}
+          >
+            <Icon name="plus" size={15} />
+          </button>
+        </span>
       </div>
       <nav className="sidebar-scroll">
         <PageTree />

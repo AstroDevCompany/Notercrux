@@ -1,12 +1,22 @@
 use crate::ids::PageId;
 use serde::{Deserialize, Serialize};
 
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum PageKind {
+    #[default]
+    Page,
+    /// A page whose child pages are records with typed properties.
+    Database,
+}
+
 /// Page metadata. Page content lives in a [`crate::Document`].
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Page {
     pub id: PageId,
     pub parent_id: Option<PageId>,
+    pub kind: PageKind,
     pub title: String,
     pub icon: Option<String>,
     /// Zero-based position among siblings.

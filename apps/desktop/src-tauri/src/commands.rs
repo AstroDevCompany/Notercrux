@@ -1,7 +1,11 @@
 //! Thin Tauri command layer. All rules live in `notercrux-domain` / `notercrux-storage`.
 
-use notercrux_domain::{Block, BlockKind, Document, Page, PageId, DOCUMENT_SCHEMA_VERSION};
-use notercrux_storage::Store;
+use notercrux_domain::{
+    Block, BlockKind, DatabaseSchema, Document, Page, PageId, DOCUMENT_SCHEMA_VERSION,
+};
+use notercrux_storage::{Record, SearchHit, Store};
+use serde_json::Value;
+use std::collections::HashMap;
 use std::sync::{Mutex, MutexGuard};
 use tauri::State;
 
@@ -134,8 +138,64 @@ pub fn save_document(
 }
 
 #[tauri::command]
-pub fn search_pages(state: State<'_, AppState>, query: String) -> CmdResult<Vec<Page>> {
-    store(&state)?.search(&query, 20).map_err(err)
+pub fn search_pages(state: State<'_, AppState>, query: String) -> CmdResult<Vec<SearchHit>> {
+    store(&state)?.search_with_snippets(&query, 20).map_err(err)
+}
+
+#[tauri::command]
+pub fn backlinks(state: State<'_, AppState>, page_id: String) -> CmdResult<Vec<Page>> {
+    store(&state)?.backlinks(id(&page_id)?).map_err(err)
+}
+
+#[tauri::command]
+pub fn create_database(
+    state: State<'_, AppState>,
+    parent_id: Option<String>,
+    title: String,
+) -> CmdResult<Page> {
+    let parent = parent_id.as_deref().map(id).transpose()?;
+    store(&state)?.create_database(parent, &title).map_err(err)
+}
+
+#[tauri::command]
+pub fn get_schema(state: State<'_, AppState>, database_id: String) -> CmdResult<DatabaseSchema> {
+    store(&state)?.get_schema(id(&database_id)?).map_err(err)
+}
+
+#[tauri::command]
+pub fn set_schema(
+    state: State<'_, AppState>,
+    database_id: String,
+    schema: DatabaseSchema,
+) -> CmdResult<()> {
+    store(&state)?
+        .set_schema(id(&database_id)?, &schema)
+        .map_err(err)
+}
+
+#[tauri::command]
+pub fn list_records(state: State<'_, AppState>, database_id: String) -> CmdResult<Vec<Record>> {
+    store(&state)?.list_records(id(&database_id)?).map_err(err)
+}
+
+#[tauri::command]
+pub fn set_property(
+    state: State<'_, AppState>,
+    page_id: String,
+    property_id: String,
+    value: Value,
+) -> CmdResult<()> {
+    store(&state)?
+        .set_property(id(&page_id)?, &property_id, &value)
+        .map_err(err)
+}
+
+#[tauri::command]
+pub fn get_properties(
+    state: State<'_, AppState>,
+    page_id: String,
+) -> CmdResult<HashMap<String, Value>> {
+    store(&state)?.get_properties(id(&page_id)?).map_err(err)
 }
 
 /// Largest file the importer will read.

@@ -66,6 +66,11 @@ export function ContextMenu({
           key={it.label}
           role="menuitem"
           className={`menu-item${it.danger ? ' menu-danger' : ''}`}
+          // Highlight follows the pointer through focus rather than CSS :hover, which WebKit can
+          // fail to repaint inside composited, filtered layers. One item is highlighted at a time.
+          onMouseMove={(e) => {
+            if (e.currentTarget !== document.activeElement) e.currentTarget.focus();
+          }}
           onClick={() => {
             onClose();
             it.onSelect();

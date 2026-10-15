@@ -66,6 +66,7 @@ mod tests {
         Page {
             id,
             parent_id: parent,
+            kind: crate::PageKind::Page,
             title: String::new(),
             icon: None,
             position: 0,

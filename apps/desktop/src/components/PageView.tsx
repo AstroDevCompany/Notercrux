@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import {
   fromProseMirror,
@@ -8,16 +8,25 @@ import {
   type Page,
 } from '@notercrux/document-model';
 import { api } from '../api';
-import { extensions } from '../editor/extensions';
+import { createExtensions } from '../editor/extensions';
 import { actions, pageLabel } from '../state/app';
 import { setFlusher } from '../state/editorBridge';
+import { Backlinks } from './Backlinks';
 import { BlockHandle } from './BlockHandle';
+import { DatabaseView } from './database/DatabaseView';
+import { RecordProperties } from './database/RecordProperties';
+import { PageLinkMenu } from './PageLinkMenu';
 import { SelectionToolbar } from './SelectionToolbar';
 import { SlashMenu } from './SlashMenu';
 
 type SaveState = 'saved' | 'saving' | 'error';
 
 export function PageView({ page }: { page: Page }) {
+  if (page.kind === 'database') return <DatabaseView key={page.id} page={page} />;
+  return <PageContent page={page} />;
+}
+
+function PageContent({ page }: { page: Page }) {
   const [doc, setDoc] = useState<Document | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -55,7 +64,7 @@ function Surface({ page, initial }: { page: Page; initial: Document }) {
   const inner = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
-    extensions,
+    extensions: useMemo(() => createExtensions(() => page.id), [page.id]),
     content: toProseMirror(initial),
     editorProps: {
       attributes: { class: 'prose', 'aria-label': 'Page content', spellcheck: 'true' },
@@ -105,10 +114,13 @@ function Surface({ page, initial }: { page: Page; initial: Document }) {
       <div className="page-inner" ref={inner}>
         <BlockHandle editor={editor} container={inner} />
         <TitleField page={page} onEnter={() => editor?.commands.focus('start')} />
+        <RecordProperties page={page} />
         <EditorContent editor={editor} />
+        <Backlinks pageId={page.id} />
       </div>
       <SelectionToolbar editor={editor} />
       <SlashMenu />
+      <PageLinkMenu />
       <div className="save-state" role="status" aria-live="polite">
         {save === 'saving' && 'Saving…'}
         {save === 'saved' && 'Saved'}

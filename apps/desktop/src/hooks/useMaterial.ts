@@ -37,6 +37,10 @@ export function useMaterial() {
       root.dataset.transparency = reduced ? 'reduced' : 'glass';
       root.dataset.motion = resolveReducedMotion(settings) ? 'reduced' : 'full';
       root.dataset.native = isTauri ? 'true' : 'false';
+      root.dataset.accent = settings.accent;
+      root.dataset.font = settings.font;
+      root.dataset.size = settings.textSize;
+      root.dataset.width = settings.pageWidth;
       root.dataset.platform = isMac ? 'mac' : isWindows ? 'windows' : 'other';
 
       if (isTauri) {

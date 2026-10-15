@@ -44,8 +44,8 @@ describe('mock api (browser preview backend)', () => {
       version: 1,
       blocks: [{ id: 'b1', type: 'paragraph', text: 'launch the zeppelin' }],
     });
-    expect((await api.searchPages('quart'))[0]?.id).toBe(page.id);
-    expect((await api.searchPages('zeppelin'))[0]?.id).toBe(page.id);
+    expect((await api.searchPages('quart'))[0]?.page.id).toBe(page.id);
+    expect((await api.searchPages('zeppelin'))[0]?.page.id).toBe(page.id);
     await api.archivePage(page.id);
     expect(await api.searchPages('zeppelin')).toEqual([]);
   });

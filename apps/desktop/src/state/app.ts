@@ -21,6 +21,8 @@ export interface ConfirmRequest {
 interface AppState {
   pages: Page[];
   currentId: string | null;
+  /** Visited pages, oldest first, for back/forward. */
+  history: { stack: string[]; index: number };
   expanded: Record<string, boolean>;
   sidebarOpen: boolean;
   paletteOpen: boolean;
@@ -54,6 +56,7 @@ const safeSet = (k: string, v: string) => {
 let state: AppState = {
   pages: [],
   currentId: null,
+  history: { stack: [], index: -1 },
   expanded: JSON.parse(safeGet(EXPANDED_KEY) ?? '{}') as Record<string, boolean>,
   sidebarOpen: true,
   paletteOpen: false,
@@ -100,7 +103,12 @@ export const actions = {
       const last = safeGet(LAST_KEY);
       const open =
         live(pages).find((p) => p.id === last) ?? childrenOf(live(pages), null)[0] ?? null;
-      set({ pages, currentId: open?.id ?? null, loaded: true });
+      set({
+        pages,
+        currentId: open?.id ?? null,
+        history: { stack: open ? [open.id] : [], index: open ? 0 : -1 },
+        loaded: true,
+      });
     });
   },
   async refresh() {
@@ -109,22 +117,65 @@ export const actions = {
     const cur = pages.find((p) => p.id === state.currentId);
     set({ pages, currentId: cur && !cur.archivedAt ? cur.id : (live(pages)[0]?.id ?? null) });
   },
+  /** Opens a page and records it in the navigation history. */
   select(id: string | null) {
-    if (id) safeSet(LAST_KEY, id);
-    set({ currentId: id });
+    if (!id) return set({ currentId: null });
+    safeSet(LAST_KEY, id);
+    const { stack, index } = state.history;
+    if (stack[index] === id) return set({ currentId: id });
+    const next = [...stack.slice(0, index + 1), id].slice(-200);
+    set({ currentId: id, history: { stack: next, index: next.length - 1 } });
+  },
+  /** Moves through history, skipping pages that no longer exist or are archived. */
+  go(delta: -1 | 1) {
+    const { stack, index } = state.history;
+    const ok = (id: string | undefined) => !!id && live(state.pages).some((p) => p.id === id);
+    let i = index + delta;
+    while (i >= 0 && i < stack.length && !ok(stack[i])) i += delta;
+    if (i < 0 || i >= stack.length) return;
+    safeSet(LAST_KEY, stack[i]!);
+    set({ currentId: stack[i]!, history: { stack, index: i } });
+  },
+  /** Expands every ancestor so `id` is visible in the sidebar tree. */
+  reveal(id: string) {
+    const expanded = { ...state.expanded };
+    let cur = state.pages.find((x) => x.id === id);
+    while (cur?.parentId) {
+      expanded[cur.parentId] = true;
+      const parentId: string = cur.parentId;
+      cur = state.pages.find((x) => x.id === parentId);
+    }
+    safeSet(EXPANDED_KEY, JSON.stringify(expanded));
+    set({ expanded });
+  },
+  /** Opens a page from anywhere (palette, links, breadcrumbs) and shows it in the tree. */
+  open(id: string) {
+    actions.reveal(id);
+    actions.select(id);
   },
   toggleExpanded(id: string, value?: boolean) {
     const expanded = { ...state.expanded, [id]: value ?? !state.expanded[id] };
     safeSet(EXPANDED_KEY, JSON.stringify(expanded));
     set({ expanded });
   },
-  async createPage(parentId: string | null = null) {
-    const page = await guard(() => api.createPage(parentId, ''));
+  async createPage(
+    parentId: string | null = null,
+    opts: { title?: string; select?: boolean } = {},
+  ) {
+    const page = await guard(() => api.createPage(parentId, opts.title ?? ''));
+    if (!page) return;
+    if (parentId) actions.toggleExpanded(parentId, true);
+    await actions.refresh();
+    if (opts.select !== false) actions.select(page.id);
+    set({ renamingId: null });
+    return page;
+  },
+  async createDatabase(parentId: string | null = null) {
+    const page = await guard(() => api.createDatabase(parentId, 'Untitled database'));
     if (!page) return;
     if (parentId) actions.toggleExpanded(parentId, true);
     await actions.refresh();
     actions.select(page.id);
-    set({ renamingId: null });
     return page;
   },
   async rename(id: string, title: string) {
@@ -243,6 +294,7 @@ export const actions = {
     }
   },
   dismissNotice: () => set({ notice: null }),
+  notify: (text: string, details: string[] = []) => set({ notice: { text, details } }),
   setPalette: (paletteOpen: boolean) => set({ paletteOpen }),
   setSettings: (settingsOpen: boolean) => set({ settingsOpen }),
   toggleSidebar: () => set({ sidebarOpen: !state.sidebarOpen }),
@@ -262,3 +314,6 @@ export function breadcrumb(pages: Page[], id: string): Page[] {
   }
   return trail;
 }
+
+export const canGo = (s: Pick<AppState, 'history'>, delta: -1 | 1) =>
+  delta < 0 ? s.history.index > 0 : s.history.index < s.history.stack.length - 1;

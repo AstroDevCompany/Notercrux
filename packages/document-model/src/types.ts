@@ -37,9 +37,12 @@ export interface Document {
   blocks: Block[];
 }
 
+export type PageKind = 'page' | 'database';
+
 export interface Page {
   id: string;
   parentId: string | null;
+  kind: PageKind;
   title: string;
   icon: string | null;
   position: number;

@@ -1,6 +1,9 @@
 <div align="center">
 
-<img src="apps/desktop/public/icon.svg" width="96" alt="Notercrux" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.png" />
+  <img src="docs/assets/logo-light.png" width="112" alt="Notercrux" />
+</picture>
 
 # Notercrux
 
@@ -34,7 +37,7 @@ Not goals: AI features, charts, or team-workspace features. See the [blueprint](
 
 ## Status
 
-Notercrux is at **Phase 0/1: foundation and technical spikes**. It is not usable as a daily
+Notercrux is at **Phase 3 of 6: essential productivity features** (editor, links, databases, search, settings). It is not usable as a daily
 notes app yet. What exists, and how well it is verified:
 
 | Area                                                                                                                 | State                                                                       |
@@ -43,6 +46,9 @@ notes app yet. What exists, and how well it is verified:
 | Page tree: create, nest, rename, move, duplicate, archive, restore, delete                                           | Implemented and tested in Rust; wired to the sidebar                        |
 | Editor: headings, lists, tasks, quotes, callouts, code, marks, slash menu, selection toolbar, block moves, undo/redo | Working; saved as structured blocks, not HTML                               |
 | Drag-and-drop for pages and blocks, keyboard reordering                                                              | Implemented; verified with synthetic events only (not native pointer drags) |
+| Page links (`[[`), backlinks, navigation history, content search with excerpts, command palette                      | Implemented and tested                                                      |
+| Databases: typed properties, relations, views with filters and sorts, record pages                                   | Implemented and tested; sync behaviour not designed yet                     |
+| Settings: accent, typeface, size, page width, rebindable shortcuts                                                   | Implemented and tested                                                      |
 | Export/import: Markdown (lossy, with warnings) and lossless JSON                                                     | Implemented and tested; native file dialogs not exercised yet               |
 | Local persistence + full-text search (SQLite)                                                                        | Implemented and tested                                                      |
 | Glass materials, light/dark, reduced transparency / motion                                                           | Implemented; **native macOS/Windows materials not yet verified**            |
@@ -87,6 +93,10 @@ Implementation/     The blueprint and phase descriptions
 - [Development guide](docs/development/README.md)
 - [User guide](docs/user-guides/README.md)
 - [Self-hosting](docs/self-hosting/README.md) (not available yet)
+
+## Credits
+
+Notercrux is made by MintFlow Technologies. Lead developer: Luca Montanari.
 
 ## Contributing & security
 

@@ -211,3 +211,23 @@ describe('JSON export', () => {
     ).toThrow(/newer/);
   });
 });
+
+describe('page links', () => {
+  it('survive a Markdown round trip and the editor conversion', () => {
+    const id = '0190a000-0000-7000-8000-000000000001';
+    const doc: Document = {
+      version: 1,
+      blocks: [
+        b('paragraph', 'see Roadmap now', {
+          marks: [{ from: 4, to: 11, type: 'pageLink', attrs: { pageId: id } }],
+        }),
+      ],
+    };
+    const md = documentToMarkdown('', doc);
+    expect(md.warnings).toEqual([]);
+    expect(md.value).toBe(`see [Roadmap](notercrux://page/${id}) now\n`);
+    const back = markdownToDocument(md.value).value.document;
+    expect(strip(back.blocks)).toEqual(strip(doc.blocks));
+    expect(fromProseMirror(toProseMirror(back)).blocks[0]!.marks).toEqual(doc.blocks[0]!.marks);
+  });
+});

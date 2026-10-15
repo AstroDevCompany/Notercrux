@@ -1,135 +1,156 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Page } from '@notercrux/document-model';
-import { api } from '../api';
+import { api, type SearchHit } from '../api';
 import { useDialog } from '../hooks/useDialog';
-import { actions, breadcrumb, getState, live, pageLabel, useApp } from '../state/app';
+import { actions, breadcrumb, canGo, getState, live, pageLabel, useApp } from '../state/app';
 import { updateSettings } from '../state/settings';
+import { bindingOf, formatBinding, type CommandId } from '../state/shortcuts';
 import { Icon, type IconName } from './Icon';
+
+type Group = 'Recent' | 'Pages' | 'Found in content' | 'Actions' | 'Create';
 
 interface Item {
   id: string;
-  group: 'Actions' | 'Pages';
+  group: Group;
   label: string;
-  hint?: string;
+  hint?: ReactNode;
   icon?: IconName | string;
+  shortcut?: string;
   run: () => void;
 }
 
+const MARK_ON = '\u0001';
+const MARK_OFF = '\u0002';
+
+/** Renders a search excerpt, highlighting the spans the backend marked. Never trusts markup. */
+export function Highlighted({ text }: { text: string }) {
+  const parts: ReactNode[] = [];
+  let rest = text;
+  let key = 0;
+  while (rest) {
+    const on = rest.indexOf(MARK_ON);
+    if (on < 0) {
+      parts.push(rest);
+      break;
+    }
+    const off = rest.indexOf(MARK_OFF, on);
+    if (off < 0) {
+      parts.push(rest.replace(MARK_ON, ''));
+      break;
+    }
+    if (on > 0) parts.push(rest.slice(0, on));
+    parts.push(<mark key={key++}>{rest.slice(on + 1, off)}</mark>);
+    rest = rest.slice(off + 1);
+  }
+  return (
+    <>
+      {parts.map((p, i) => (
+        <Fragment key={i}>{p}</Fragment>
+      ))}
+    </>
+  );
+}
+
+const bindingHint = (id: CommandId) => formatBinding(bindingOf(id));
+
 function commands(): Item[] {
-  const { currentId } = getState();
+  const s = getState();
+  const { currentId } = s;
+  const current = s.pages.find((p) => p.id === currentId);
+  const act = (
+    id: string,
+    label: string,
+    icon: IconName,
+    run: () => void,
+    shortcut?: string,
+  ): Item => ({
+    id,
+    group: 'Actions',
+    label,
+    icon,
+    run,
+    shortcut,
+  });
   const list: Item[] = [
-    {
-      id: 'new',
-      group: 'Actions',
-      label: 'New page',
-      icon: 'plus',
-      run: () => void actions.createPage(null),
-    },
-    {
-      id: 'import',
-      group: 'Actions',
-      label: 'Import Markdown or JSON file…',
-      icon: 'page',
-      run: () => void actions.importFile(),
-    },
-    {
-      id: 'settings',
-      group: 'Actions',
-      label: 'Open settings',
-      icon: 'settings',
-      run: () => actions.setSettings(true),
-    },
-    {
-      id: 'sidebar',
-      group: 'Actions',
-      label: 'Toggle sidebar',
-      icon: 'sidebar',
-      run: () => actions.toggleSidebar(),
-    },
-    {
-      id: 'theme-light',
-      group: 'Actions',
-      label: 'Theme: Light',
-      icon: 'settings',
-      run: () => updateSettings({ theme: 'light' }),
-    },
-    {
-      id: 'theme-dark',
-      group: 'Actions',
-      label: 'Theme: Dark',
-      icon: 'settings',
-      run: () => updateSettings({ theme: 'dark' }),
-    },
-    {
-      id: 'theme-system',
-      group: 'Actions',
-      label: 'Theme: Match system',
-      icon: 'settings',
-      run: () => updateSettings({ theme: 'system' }),
-    },
-    {
-      id: 'glass-reduced',
-      group: 'Actions',
-      label: 'Reduce transparency',
-      icon: 'settings',
-      run: () => updateSettings({ transparency: 'reduced' }),
-    },
-    {
-      id: 'glass-on',
-      group: 'Actions',
-      label: 'Enable glass effects',
-      icon: 'settings',
-      run: () => updateSettings({ transparency: 'glass' }),
-    },
+    act('new', 'New page', 'plus', () => void actions.createPage(null), bindingHint('newPage')),
+    act('new-db', 'New database', 'table', () => void actions.createDatabase(null)),
   ];
-  if (currentId) {
-    list.splice(
-      1,
-      0,
-      {
-        id: 'new-child',
-        group: 'Actions',
-        label: 'New nested page',
-        icon: 'plus',
-        run: () => void actions.createPage(currentId),
-      },
-      {
-        id: 'rename',
-        group: 'Actions',
-        label: 'Rename current page',
-        icon: 'edit',
-        run: () => actions.startRename(currentId),
-      },
-      {
-        id: 'duplicate',
-        group: 'Actions',
-        label: 'Duplicate current page',
-        icon: 'copy',
-        run: () => void actions.duplicate(currentId),
-      },
-      {
-        id: 'export-md',
-        group: 'Actions',
-        label: 'Export page as Markdown…',
-        icon: 'copy',
-        run: () => void actions.exportPage(currentId, 'md'),
-      },
-      {
-        id: 'export-json',
-        group: 'Actions',
-        label: 'Export page as JSON (lossless)…',
-        icon: 'copy',
-        run: () => void actions.exportPage(currentId, 'json'),
-      },
-      {
-        id: 'archive',
-        group: 'Actions',
-        label: 'Move current page to archive',
-        icon: 'archive',
-        run: () => void actions.archive(currentId),
-      },
+  if (canGo(s, -1))
+    list.push(act('back', 'Go back', 'back', () => actions.go(-1), bindingHint('back')));
+  if (canGo(s, 1))
+    list.push(act('forward', 'Go forward', 'forward', () => actions.go(1), bindingHint('forward')));
+  if (currentId && current) {
+    if (current.kind === 'database') {
+      list.push(
+        act(
+          'new-record',
+          'New record in this database',
+          'plus',
+          () => void actions.createPage(currentId),
+        ),
+      );
+    } else {
+      list.push(
+        act('new-child', 'New nested page', 'plus', () => void actions.createPage(currentId)),
+      );
+    }
+    list.push(
+      act('rename', 'Rename current page', 'edit', () => actions.startRename(currentId)),
+      act('duplicate', 'Duplicate current page', 'copy', () => void actions.duplicate(currentId)),
+    );
+    if (current.kind !== 'database') {
+      list.push(
+        act(
+          'export-md',
+          'Export page as Markdown…',
+          'copy',
+          () => void actions.exportPage(currentId, 'md'),
+        ),
+        act(
+          'export-json',
+          'Export page as JSON (lossless)…',
+          'copy',
+          () => void actions.exportPage(currentId, 'json'),
+        ),
+      );
+    }
+    list.push(
+      act(
+        'archive',
+        'Move current page to archive',
+        'archive',
+        () => void actions.archive(currentId),
+      ),
     );
   }
+  list.push(
+    act('import', 'Import Markdown or JSON file…', 'page', () => void actions.importFile()),
+    act(
+      'sidebar',
+      'Toggle sidebar',
+      'sidebar',
+      () => actions.toggleSidebar(),
+      bindingHint('toggleSidebar'),
+    ),
+    act(
+      'settings',
+      'Open settings',
+      'settings',
+      () => actions.setSettings(true),
+      bindingHint('settings'),
+    ),
+    act('theme-light', 'Theme: Light', 'settings', () => updateSettings({ theme: 'light' })),
+    act('theme-dark', 'Theme: Dark', 'settings', () => updateSettings({ theme: 'dark' })),
+    act('theme-system', 'Theme: Match system', 'settings', () =>
+      updateSettings({ theme: 'system' }),
+    ),
+    act('glass-reduced', 'Reduce transparency', 'settings', () =>
+      updateSettings({ transparency: 'reduced' }),
+    ),
+    act('glass-on', 'Enable glass effects', 'settings', () =>
+      updateSettings({ transparency: 'glass' }),
+    ),
+  );
   return list;
 }
 
@@ -143,8 +164,9 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const listId = useId();
   const pages = useApp((s) => s.pages);
+  const history = useApp((s) => s.history);
   const [query, setQuery] = useState('');
-  const [hits, setHits] = useState<Page[]>([]);
+  const [hits, setHits] = useState<SearchHit[]>([]);
   const [active, setActive] = useState(0);
   useDialog(ref, onClose);
 
@@ -162,22 +184,55 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
 
   const items = useMemo<Item[]>(() => {
     const q = query.trim().toLowerCase();
-    const cmds = commands().filter((c) => !q || c.label.toLowerCase().includes(q));
     const all = live(pages);
-    const byTitle = q
-      ? all.filter((p) => pageLabel(p).toLowerCase().includes(q))
-      : [...all].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 8);
-    const merged = [...byTitle, ...hits.filter((h) => !byTitle.some((p) => p.id === h.id))];
-    const pageItems: Item[] = merged.map((p) => ({
-      id: `page:${p.id}`,
-      group: 'Pages',
+    const pageItem = (p: Page, group: Group, hint?: ReactNode): Item => ({
+      id: `${group}:${p.id}`,
+      group,
       label: pageLabel(p),
-      hint: breadcrumb(pages, p.id).slice(0, -1).map(pageLabel).join(' / ') || undefined,
-      icon: p.icon ?? 'page',
-      run: () => actions.select(p.id),
-    }));
-    return q ? [...pageItems, ...cmds] : [...cmds, ...pageItems];
-  }, [query, hits, pages]);
+      hint: hint ?? (breadcrumb(pages, p.id).slice(0, -1).map(pageLabel).join(' / ') || undefined),
+      icon: p.icon ?? (p.kind === 'database' ? 'table' : 'page'),
+      run: () => actions.open(p.id),
+    });
+    const cmds = commands().filter((c) => !q || c.label.toLowerCase().includes(q));
+
+    if (!q) {
+      // Recent: most recently visited first, then most recently edited.
+      const seen = new Set<string>();
+      const recent: Page[] = [];
+      for (const id of [...history.stack].reverse()) {
+        const p = all.find((x) => x.id === id);
+        if (p && !seen.has(id) && id !== getState().currentId) {
+          seen.add(id);
+          recent.push(p);
+        }
+      }
+      for (const p of [...all].sort((a, b) => b.updatedAt - a.updatedAt)) {
+        if (!seen.has(p.id) && p.id !== getState().currentId) {
+          seen.add(p.id);
+          recent.push(p);
+        }
+      }
+      return [...cmds, ...recent.slice(0, 8).map((p) => pageItem(p, 'Recent'))];
+    }
+
+    const byTitle = all.filter((p) => pageLabel(p).toLowerCase().includes(q));
+    const titleIds = new Set(byTitle.map((p) => p.id));
+    const content = hits.filter((h) => !titleIds.has(h.page.id));
+    const out: Item[] = [
+      ...byTitle.slice(0, 8).map((p) => pageItem(p, 'Pages')),
+      ...content.map((h) => pageItem(h.page, 'Found in content', <Highlighted text={h.snippet} />)),
+      ...cmds,
+    ];
+    const title = query.trim();
+    out.push({
+      id: 'create-page',
+      group: 'Create',
+      label: `Create page “${title}”`,
+      icon: 'plus',
+      run: () => void actions.createPage(null, { title }),
+    });
+    return out;
+  }, [query, hits, pages, history]);
 
   useEffect(() => setActive(0), [query]);
   useEffect(() => {
@@ -194,6 +249,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') setActive((a) => Math.min(a + 1, items.length - 1));
     else if (e.key === 'ArrowUp') setActive((a) => Math.max(a - 1, 0));
+    else if (e.key === 'Home' && e.altKey) setActive(0);
     else if (e.key === 'Enter') run(items[active]);
     else return;
     e.preventDefault();
@@ -219,7 +275,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
             aria-controls={listId}
             aria-activedescendant={items.length ? `${listId}-${active}` : undefined}
             aria-label="Search pages and commands"
-            placeholder="Search pages or run a command…"
+            placeholder="Search pages, content, or run a command…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             spellCheck={false}
@@ -244,7 +300,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
                   role="option"
                   aria-selected={i === active}
                   className={`palette-item${i === active ? ' is-active' : ''}`}
-                  onMouseMove={() => setActive(i)}
+                  onMouseMove={() => active !== i && setActive(i)}
                   onClick={() => run(it)}
                 >
                   <span className="palette-icon">
@@ -256,6 +312,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
                   </span>
                   <span className="palette-label">{it.label}</span>
                   {it.hint && <span className="palette-hint">{it.hint}</span>}
+                  {it.shortcut && <kbd>{it.shortcut}</kbd>}
                 </div>
               </li>
             );

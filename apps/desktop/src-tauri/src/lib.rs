@@ -27,6 +27,13 @@ pub fn run() {
             commands::load_document,
             commands::save_document,
             commands::search_pages,
+            commands::backlinks,
+            commands::create_database,
+            commands::get_schema,
+            commands::set_schema,
+            commands::list_records,
+            commands::set_property,
+            commands::get_properties,
             commands::export_file,
             commands::import_file,
         ])

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { AppLogo } from './components/AppLogo';
 import { CommandPalette } from './components/CommandPalette';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { PageView } from './components/PageView';
@@ -7,6 +8,7 @@ import { Sidebar } from './components/Sidebar';
 import { Toolbar } from './components/Toolbar';
 import { useMaterial } from './hooks/useMaterial';
 import { actions, useApp } from './state/app';
+import { commandForEvent } from './state/shortcuts';
 
 export default function App() {
   useMaterial();
@@ -22,14 +24,31 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!(e.metaKey || e.ctrlKey) || e.altKey) return;
-      const k = e.key.toLowerCase();
-      if (k === 'k') actions.setPalette(!(document.querySelector('.palette') !== null));
-      else if (k === 'n') void actions.createPage(null);
-      else if (k === ',') actions.setSettings(true);
-      else if (k === '\\') actions.toggleSidebar();
-      else return;
+      // While a shortcut is being recorded in Settings, keys belong to the recorder.
+      if (e.defaultPrevented) return;
+      const cmd = commandForEvent(e);
+      if (!cmd) return;
       e.preventDefault();
+      switch (cmd) {
+        case 'palette':
+          actions.setPalette(document.querySelector('.palette') === null);
+          break;
+        case 'newPage':
+          void actions.createPage(null);
+          break;
+        case 'settings':
+          actions.setSettings(true);
+          break;
+        case 'toggleSidebar':
+          actions.toggleSidebar();
+          break;
+        case 'back':
+          actions.go(-1);
+          break;
+        case 'forward':
+          actions.go(1);
+          break;
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -46,6 +65,7 @@ export default function App() {
           ) : (
             loaded && (
               <div className="page-state">
+                <AppLogo size={56} />
                 <h2>Nothing open</h2>
                 <p>Pick a page from the sidebar, or press ⌘/Ctrl+N to create one.</p>
                 <button className="btn btn-primary" onClick={() => void actions.createPage(null)}>

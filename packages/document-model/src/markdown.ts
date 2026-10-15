@@ -20,6 +20,9 @@ export interface Converted<T> {
 
 // ---- export ------------------------------------------------------------------------------------
 
+/** Page links round-trip through Markdown as links with this scheme. */
+export const PAGE_LINK_PREFIX = 'notercrux://page/';
+
 const ESCAPE = /([\\`*_[\]~])/g;
 
 function renderInline(block: Block, warnings: Set<string>): string {
@@ -45,7 +48,9 @@ function renderInline(block: Block, warnings: Set<string>): string {
     if (active.some((m) => m.type === 'italic')) seg = `*${seg}*`;
     if (active.some((m) => m.type === 'bold')) seg = `**${seg}**`;
     const link = active.find((m) => m.type === 'link');
+    const pageLink = active.find((m) => m.type === 'pageLink');
     if (link) seg = `[${seg}](${String(link.attrs?.href ?? '')})`;
+    else if (pageLink) seg = `[${seg}](${PAGE_LINK_PREFIX}${String(pageLink.attrs?.pageId ?? '')})`;
     if (active.some((m) => m.type === 'underline'))
       warnings.add('Underline is not supported in Markdown and was dropped.');
     out += seg;
@@ -203,6 +208,8 @@ function parseInline(src: string, warnings: Set<string>): Inline {
         if (isImage) {
           warnings.add('Images are not supported; they were imported as links.');
           wrap(label || href, 'link', { href });
+        } else if (href.startsWith(PAGE_LINK_PREFIX)) {
+          wrap(label, 'pageLink', { pageId: href.slice(PAGE_LINK_PREFIX.length) });
         } else {
           wrap(label, 'link', { href });
         }

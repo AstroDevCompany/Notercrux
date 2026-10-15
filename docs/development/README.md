@@ -35,3 +35,23 @@ See [testing.md](testing.md).
 `pnpm web` is fast but **is not the app**: there is no native window material and the backend is a
 mock. Anything about the native window, SQLite behaviour or platform rendering must be checked with
 `pnpm dev`.
+
+## App icons and logos
+
+The two master logos live in `branding/` (`Notercrux-logo-light.png`, `Notercrux-logo-dark.png`,
+2000×2000, transparent rounded corners). Everything else is generated from them:
+
+```bash
+./scripts/generate-icons.sh   # macOS only: needs sips, iconutil, swift and pnpm
+```
+
+| Output                                                                  | Used for                                                                |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `src-tauri/icons/icon.icns`                                             | macOS app and Dock icon (artwork on Apple's 824/1024 grid, with shadow) |
+| `src-tauri/icons/icon.ico`, `*.png`, `Square*Logo.png`, `StoreLogo.png` | Windows exe, taskbar, installers, Store tiles; Linux                    |
+| `public/icon-{light,dark}.png`                                          | Browser/preview favicon (follows the OS theme)                          |
+| `src/assets/logo-{light,dark}.png`                                      | In-app logo (Settings, empty state), follows the app theme              |
+| `docs/assets/logo-{light,dark}.png`                                     | README header                                                           |
+
+The bundle icons use the **light** logo. Rendered icons were checked by extracting the `.icns`
+back out; the Windows taskbar/exe rendering has not been looked at on a Windows machine.
