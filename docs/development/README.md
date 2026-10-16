@@ -19,6 +19,9 @@ Rust stable, Node 22+, pnpm 10, and the [Tauri prerequisites](https://tauri.app/
 | `pnpm format`    | Prettier and rustfmt.                                          |
 
 Individual crates: `cargo test -p notercrux-storage`, `cargo test -p notercrux-sync`, etc.
+Run a local sync server with `cargo run -p notercrux-sync-server` (see
+[self-hosting](../self-hosting/README.md)). To run the server and sync tests against PostgreSQL see
+[testing.md](testing.md).
 
 ## Where the app stores data
 

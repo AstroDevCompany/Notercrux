@@ -2,6 +2,7 @@ import { Extension, type Editor, type Range } from '@tiptap/core';
 import Suggestion, { type SuggestionProps } from '@tiptap/suggestion';
 import { PluginKey } from '@tiptap/pm/state';
 import { useSyncExternalStore } from 'react';
+import { addFiles, pickFiles } from './attachmentInsert';
 
 export interface SlashItem {
   id: string;
@@ -83,6 +84,26 @@ export const SLASH_ITEMS: SlashItem[] = [
     hint: 'Monospaced code',
     keywords: ['pre', 'snippet', '```'],
     run: (e, r) => chain(e, r).toggleCodeBlock().run(),
+  },
+  {
+    id: 'image',
+    title: 'Image',
+    hint: 'Upload a picture',
+    keywords: ['photo', 'picture', 'img', 'upload'],
+    run: (e, r) => {
+      chain(e, r).run();
+      void pickFiles('image/*').then((files) => (files.length ? addFiles(e, files) : undefined));
+    },
+  },
+  {
+    id: 'file',
+    title: 'File',
+    hint: 'Attach any file',
+    keywords: ['attachment', 'upload', 'pdf', 'document'],
+    run: (e, r) => {
+      chain(e, r).run();
+      void pickFiles('*/*').then((files) => (files.length ? addFiles(e, files) : undefined));
+    },
   },
   {
     id: 'divider',

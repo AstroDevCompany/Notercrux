@@ -228,3 +228,51 @@ describe('code block language', () => {
     expect(fromProseMirror(toProseMirror(doc))).toEqual(doc);
   });
 });
+
+describe('attachments', () => {
+  const hash = 'a'.repeat(64);
+
+  it('image and file blocks round-trip with their attachment reference and caption', () => {
+    const pm: PMNode = {
+      type: 'doc',
+      content: [
+        {
+          type: 'image',
+          attrs: {
+            blockId: 'img1',
+            attachment: hash,
+            name: 'cat.png',
+            mime: 'image/png',
+            size: 1234,
+            caption: 'A cat',
+          },
+        },
+        {
+          type: 'file',
+          attrs: {
+            blockId: 'f1',
+            attachment: hash,
+            name: 'plan.pdf',
+            mime: 'application/pdf',
+            size: 99,
+          },
+        },
+      ],
+    };
+    const doc = fromProseMirror(pm);
+    expect(doc.blocks[0]).toEqual({
+      id: 'img1',
+      type: 'image',
+      text: 'A cat',
+      attrs: { attachment: hash, name: 'cat.png', mime: 'image/png', size: 1234 },
+    });
+    expect(doc.blocks[1]).toEqual({
+      id: 'f1',
+      type: 'file',
+      text: '',
+      attrs: { attachment: hash, name: 'plan.pdf', mime: 'application/pdf', size: 99 },
+    });
+    expect(fromProseMirror(toProseMirror(doc))).toEqual(doc);
+    expect(toProseMirror(doc).content?.[0]?.attrs?.caption).toBe('A cat');
+  });
+});

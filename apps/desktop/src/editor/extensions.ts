@@ -1,5 +1,6 @@
 import StarterKit from '@tiptap/starter-kit';
 import { TaskItem, TaskList } from '@tiptap/extension-list';
+import { AttachmentDrop, FileBlock, ImageBlock } from './attachment';
 import { BlockId } from './blockId';
 import { BlockMove } from './blockMove';
 import { BlockRangeSelection } from './blockRange';
@@ -26,6 +27,9 @@ export const createExtensions = (
   TaskItem.configure({ nested: true }),
   Callout.configure({ reactView: views }),
   PageLink,
+  ImageBlock.configure({ reactView: views }),
+  FileBlock.configure({ reactView: views }),
+  AttachmentDrop,
   BlockId,
   BlockMove,
   BlockSelect,

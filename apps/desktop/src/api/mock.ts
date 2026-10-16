@@ -9,6 +9,7 @@ import {
   type Document,
   type Page,
 } from '@notercrux/document-model';
+import { mockSyncApi } from './mock.sync';
 import type { Api, SearchHit } from './types';
 
 /**
@@ -258,6 +259,11 @@ export const mockApi: Api = {
     find(id).updatedAt = Date.now();
     save();
   },
+  async saveDocumentRebased(id, _base, doc) {
+    // Nothing else edits the page in the browser preview, so the editor's copy is always current.
+    await mockApi.saveDocument(id, doc);
+    return { document: structuredClone(doc), conflicts: 0 };
+  },
   async searchPages(query): Promise<SearchHit[]> {
     const words = query.toLowerCase().split(/\s+/).filter(Boolean);
     if (!words.length) return [];
@@ -341,4 +347,5 @@ export const mockApi: Api = {
   async getProperties(pageId) {
     return structuredClone(data.props[pageId] ?? {});
   },
+  ...mockSyncApi,
 };

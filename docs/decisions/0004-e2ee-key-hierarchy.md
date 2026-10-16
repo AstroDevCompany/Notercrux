@@ -1,6 +1,8 @@
 # ADR 0004: E2EE key hierarchy, recovery and device enrollment
 
-**Status:** Proposed (spike: `crates/crypto`). **Not independently reviewed.**
+**Status:** Accepted, refined by [ADR 0008](0008-key-management-enrollment-and-recovery.md)
+(key epochs, rotation on revocation, a recovery key that devices can re-wrap for). **Not
+independently reviewed.**
 
 ## Decision under test
 

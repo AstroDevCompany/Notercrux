@@ -112,6 +112,13 @@ function renderBlocks(blocks: Block[], depth: number, out: string[], warnings: S
       case 'divider':
         out.push('---');
         break;
+      case 'image':
+      case 'file':
+        out.push(`${indent}[Attachment: ${String(b.attrs?.name ?? 'file')}]`);
+        warnings.add(
+          'Attachments are not included in Markdown exports. Use the JSON export, or save them from the page.',
+        );
+        break;
       default:
         warnings.add(`Blocks of type "${b.type}" were exported as plain text.`);
         out.push(text);

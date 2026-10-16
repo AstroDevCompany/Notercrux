@@ -7,7 +7,10 @@
 | `crates/domain`           | Serialization round trip, unknown block kinds rejected, page-tree cycle detection.                                                                                                                              |
 | `crates/storage`          | Nesting/reordering, cycle rejection leaves state unchanged, document round trip, search and index rebuild, archive/restore, duplicate (subtree + documents), newer document versions refused, cascading delete. |
 | `crates/crypto`           | Round trip, context binding (AAD), tampering, wrong key, nonce uniqueness, version rejection, recovery-key typo detection, device enrollment, SAS mismatch.                                                     |
-| `crates/sync`             | Blueprint sync scenarios listed in [ADR 0003](../decisions/0003-crdt-sync.md).                                                                                                                                  |
+| `crates/crdt`             | Page and workspace documents: round trips, minimal operations, moves, marks, concurrent edits, delete-versus-edit recovery, out-of-order delivery, randomized convergence (12 + 10 seeds).                      |
+| `crates/protocol`         | Wire types, base64 JSON, operation envelope.                                                                                                                                                                    |
+| `apps/sync-server`        | See below.                                                                                                                                                                                                      |
+| `crates/sync`             | See below.                                                                                                                                                                                                      |
 | `packages/document-model` | ProseMirror ⇄ Document round trips, stable ids, code-point marks, unsupported content rejected.                                                                                                                 |
 
 Phase 3 added: database schema/value validation (Rust and TypeScript), value cleanup on schema edits,
@@ -25,6 +28,36 @@ Multi-block selection: `editor/blockRange.test.ts` covers the range model (index
 vertical hit-testing, lists as one block), state clearing, Backspace/Delete/Esc/Enter/arrows/⌘D,
 typing, whole-block copy/cut/paste and turn-into; `components/marquee.test.tsx` covers the drag
 (start rules, upward drags, threshold, scrollbar, plain clicks) with stubbed layout.
+
+### Phase 4: sync, encryption, server
+
+- `crates/storage/tests/sync.rs`: two or three real stores exchanging operations through a simulated
+  hub (capture, merge, materialize, held operations from newer apps, crash repair, the rebased save).
+- `apps/sync-server/tests/api.rs`: signature, replay, clock skew, protocol version, rate limit, quotas,
+  idempotent push, long polling, concurrent pushes, enrollment, revocation and key wraps, recovery,
+  chunked attachments with resume, metrics, deletion. `tests/postgres.rs`: restart persistence,
+  replay protection across instances, one total order across two instances, TLS to PostgreSQL.
+- `crates/sync/tests`: a real server on a loopback port and a fault-injecting proxy that can drop a
+  request, drop a response, take the server down or rewrite responses like a hostile server.
+  `scenarios.rs` covers the blueprint cases (parts edited offline, same text, delete versus edit,
+  move versus edit, long offline, app closed between upload and acknowledgement, server unavailable,
+  device removed with unsynced changes, newer versus older app) and a three-device random run.
+  `security.rs`: ciphertext-only storage scan, damaged and re-addressed operations, forged key
+  update, enrollment tampering, expired and reused invites, recovery (also after rotation), quota
+  errors. `attachments.rs`: resume of interrupted uploads and downloads, damaged and reordered
+  chunks, quota, rotation.
+- Desktop UI: setup wizard and recovery key confirmation, adding and removing devices, join flow,
+  removed-device banner, image and file blocks, applying remote changes to an open editor.
+
+PostgreSQL tests run when `NOTERCRUX_TEST_DATABASE_URL` is set (an empty database; each test uses
+unique workspace ids, so the database can be reused). The TLS test also needs
+`NOTERCRUX_TEST_DATABASE_TLS_URL` and `NOTERCRUX_TEST_DATABASE_CA`:
+
+```bash
+NOTERCRUX_TEST_DATABASE_URL=postgres://user@127.0.0.1:5432/ncx_test cargo test -p notercrux-sync-server -p notercrux-sync
+```
+
+Without the variable the same tests run against the in-memory repository.
 
 Run everything with `pnpm test`.
 
@@ -46,6 +79,10 @@ Run everything with `pnpm test`.
   apps) and the block drag handle with a real pointer.
 - Database table with a real pointer: cell editing, popovers, scrolling with thousands of rows.
 - `[[` picker and slash menu with an IME.
+- Sync in the native app: the Keychain / Credential Manager / Secret Service paths of the secure
+  storage, the file picker for image and file blocks, paste and drop of files, saving an attachment
+  with the native dialog, and the sync status badge while the window is in the background.
+- Sync against a server behind a real reverse proxy with HTTPS (the tests use plain HTTP on loopback).
 - Native save/open dialogs for export/import (Rust commands; the browser preview uses a download).
 - Keyboard-only walkthrough and screen-reader pass of the sidebar tree, palette and dialogs.
 - UI end-to-end tests of the native app.

@@ -1,0 +1,15 @@
+[package]
+name = "notercrux-crdt"
+description = "CRDT documents (Loro) for page content and for the workspace tree, schemas and property values."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+notercrux-domain = { path = "../domain" }
+loro = "1.16"
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+sha2 = "0.10"

@@ -11,6 +11,8 @@ const TYPES = [
   'blockquote',
   'codeBlock',
   'horizontalRule',
+  'image',
+  'file',
 ];
 
 /**

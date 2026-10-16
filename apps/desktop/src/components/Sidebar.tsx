@@ -2,6 +2,7 @@ import { actions } from '../state/app';
 import { ArchiveList } from './ArchiveList';
 import { Icon } from './Icon';
 import { PageTree } from './PageTree';
+import { SyncBadge } from './SyncBadge';
 
 const mod = /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+';
 
@@ -40,6 +41,7 @@ export function Sidebar() {
       </nav>
       <ArchiveList />
       <div className="sidebar-footer">
+        <SyncBadge />
         <button className="footer-btn" onClick={() => actions.setSettings(true)}>
           <Icon name="settings" size={15} /> Settings
         </button>

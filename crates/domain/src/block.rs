@@ -19,6 +19,10 @@ pub enum BlockKind {
     Code,
     Divider,
     PageLink,
+    /// An image stored as an attachment (`attrs.attachment` is its content hash).
+    Image,
+    /// Any other file stored as an attachment.
+    File,
 }
 
 /// Inline formatting over a half-open character range `[from, to)` of a block's text.

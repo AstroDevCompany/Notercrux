@@ -15,6 +15,13 @@ use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 use thiserror::Error;
 
+pub mod attachments;
+pub mod sync;
+pub use attachments::{
+    AttachmentMeta, AttachmentState, AttachmentWork, ATTACHMENT_CHUNK, MAX_ATTACHMENT_BYTES,
+};
+pub use sync::{ApplyReport, LocalOp, RemoteOp, SyncStats, SYNC_FORMAT};
+
 #[derive(Debug, Error)]
 pub enum StoreError {
     #[error("database error: {0}")]
@@ -25,6 +32,8 @@ pub enum StoreError {
     Tree(#[from] TreeError),
     #[error(transparent)]
     Schema(#[from] SchemaError),
+    #[error(transparent)]
+    Crdt(#[from] notercrux_crdt::CrdtError),
     #[error("page {0} is not a database")]
     NotADatabase(PageId),
     #[error("page {0} is not a record of a database")]
@@ -43,6 +52,11 @@ const MIGRATIONS: &[(&str, &str)] = &[
         "0002_databases",
         include_str!("../migrations/0002_databases.sql"),
     ),
+    ("0003_sync", include_str!("../migrations/0003_sync.sql")),
+    (
+        "0004_attachments",
+        include_str!("../migrations/0004_attachments.sql"),
+    ),
 ];
 
 /// A page that matched a search, with a short excerpt. Matches are wrapped in U+0001 … U+0002.
@@ -60,17 +74,18 @@ pub struct Record {
 }
 
 pub struct Store {
-    conn: Connection,
+    pub(crate) conn: Connection,
+    pub(crate) sync: sync::SyncRuntime,
 }
 
-fn now_ms() -> i64 {
+pub(crate) fn now_ms() -> i64 {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|d| d.as_millis() as i64)
         .unwrap_or(0)
 }
 
-fn page_from_row(r: &Row<'_>) -> rusqlite::Result<Page> {
+pub(crate) fn page_from_row(r: &Row<'_>) -> rusqlite::Result<Page> {
     let id: String = r.get("id")?;
     let parent: Option<String> = r.get("parent_id")?;
     let parse = |s: String| {
@@ -105,8 +120,12 @@ impl Store {
 
     fn init(conn: Connection) -> Result<Self> {
         conn.execute_batch("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;")?;
-        let mut store = Self { conn };
+        let mut store = Self {
+            conn,
+            sync: sync::SyncRuntime::default(),
+        };
         store.migrate()?;
+        store.sync.enabled = store.sync_get("enabled")?.as_deref() == Some("1");
         Ok(store)
     }
 
@@ -181,6 +200,7 @@ impl Store {
         )?;
         reindex(&tx, id)?;
         tx.commit()?;
+        self.capture(sync::Change::PageCreated(id));
         Ok(self.get_page(id)?.expect("just inserted"))
     }
 
@@ -195,6 +215,7 @@ impl Store {
         }
         reindex(&tx, id)?;
         tx.commit()?;
+        self.capture(sync::Change::PageMeta(id));
         Ok(())
     }
 
@@ -203,6 +224,7 @@ impl Store {
             "UPDATE pages SET icon = ?2, updated_at = ?3 WHERE id = ?1",
             params![id.to_string(), icon, now_ms()],
         )?;
+        self.capture(sync::Change::PageMeta(id));
         Ok(())
     }
 
@@ -238,6 +260,7 @@ impl Store {
             write_positions(&tx, &rest)?;
         }
         tx.commit()?;
+        self.capture(sync::Change::TreeChanged);
         Ok(())
     }
 
@@ -312,6 +335,9 @@ impl Store {
         siblings.insert(at, map[&id].to_string());
         write_positions(&tx, &siblings)?;
         tx.commit()?;
+        self.capture(sync::Change::SubtreeCreated(
+            map.values().copied().collect(),
+        ));
         Ok(self.get_page(map[&id])?.expect("just inserted"))
     }
 
@@ -356,6 +382,7 @@ impl Store {
             )?;
         }
         tx.commit()?;
+        self.capture(sync::Change::TreeChanged);
         Ok(())
     }
 
@@ -364,7 +391,7 @@ impl Store {
         let pages = self.list_pages()?;
         let ids = PageTree::from_pages(&pages).subtree(id);
         let tx = self.conn.transaction()?;
-        for i in ids {
+        for i in ids.iter() {
             tx.execute(
                 "DELETE FROM search_index WHERE page_id = ?1",
                 [i.to_string()],
@@ -372,6 +399,7 @@ impl Store {
         }
         tx.execute("DELETE FROM pages WHERE id = ?1", [id.to_string()])?;
         tx.commit()?;
+        self.capture(sync::Change::Deleted);
         Ok(())
     }
 
@@ -412,7 +440,33 @@ impl Store {
         )?;
         reindex(&tx, id)?;
         tx.commit()?;
+        self.capture(sync::Change::Document(id));
         Ok(())
+    }
+
+    /// Saves what the editor changed (`base` -> `local`) on top of the page as it is now. When remote
+    /// changes were applied since the editor loaded `base`, they are kept; plain overwriting would
+    /// delete them. Returns the merged page (what the editor should now show) and how many blocks
+    /// were edited on both sides in the same place.
+    pub fn save_document_rebased(
+        &mut self,
+        id: PageId,
+        base: &Document,
+        local: &Document,
+    ) -> Result<notercrux_domain::Rebased> {
+        let current = self.load_document(id)?;
+        if current == *base {
+            self.save_document(id, local)?;
+            return Ok(notercrux_domain::Rebased {
+                document: local.clone(),
+                conflicts: 0,
+            });
+        }
+        let merged = notercrux_domain::rebase(base, local, &current);
+        if merged.document != current {
+            self.save_document(id, &merged.document)?;
+        }
+        Ok(merged)
     }
 
     // ---- search ----------------------------------------------------------------------------
@@ -494,6 +548,7 @@ impl Store {
             ],
         )?;
         tx.commit()?;
+        self.capture(sync::Change::DatabaseCreated(page.id));
         Ok(self.get_page(page.id)?.expect("just inserted"))
     }
 
@@ -586,6 +641,7 @@ impl Store {
             }
         }
         tx.commit()?;
+        self.capture(sync::Change::Schema(db));
         Ok(())
     }
 
@@ -621,6 +677,7 @@ impl Store {
             params![page.to_string(), now_ms()],
         )?;
         tx.commit()?;
+        self.capture(sync::Change::Property(page, property.to_string()));
         Ok(())
     }
 
@@ -733,7 +790,7 @@ fn write_positions(tx: &Transaction<'_>, ids: &[String]) -> rusqlite::Result<()>
     Ok(())
 }
 
-fn reindex(tx: &Transaction<'_>, id: PageId) -> Result<()> {
+pub(crate) fn reindex(tx: &Transaction<'_>, id: PageId) -> Result<()> {
     let id_s = id.to_string();
     let title: String = tx.query_row("SELECT title FROM pages WHERE id = ?1", [&id_s], |r| {
         r.get(0)
@@ -759,6 +816,7 @@ fn reindex(tx: &Transaction<'_>, id: PageId) -> Result<()> {
     let mut targets = HashSet::new();
     if let Some(Ok(doc)) = content_doc {
         collect_links(&doc.blocks, &mut targets);
+        attachments::register_references(tx, &doc.blocks)?;
     }
     tx.execute("DELETE FROM page_links WHERE source_id = ?1", [&id_s])?;
     for t in targets {

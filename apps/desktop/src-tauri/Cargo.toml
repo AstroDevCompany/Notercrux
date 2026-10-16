@@ -16,6 +16,19 @@ tauri-build = { version = "2", features = [] }
 tauri = { version = "2", features = ["macos-private-api"] }
 notercrux-domain = { path = "../../../crates/domain" }
 notercrux-storage = { path = "../../../crates/storage" }
+notercrux-sync = { path = "../../../crates/sync" }
+notercrux-protocol = { path = "../../../crates/protocol" }
+tokio = { version = "1", features = ["sync", "time"] }
 serde.workspace = true
 serde_json.workspace = true
 tauri-plugin-dialog = "2"
+
+# The operating system's secure storage for device keys. Other platforms fall back to a private file.
+[target.'cfg(target_os = "macos")'.dependencies]
+keyring = { version = "3", default-features = false, features = ["apple-native"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+keyring = { version = "3", default-features = false, features = ["windows-native"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+keyring = { version = "3", default-features = false, features = ["sync-secret-service", "crypto-rust", "vendored"] }

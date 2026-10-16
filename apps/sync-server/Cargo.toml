@@ -1,0 +1,36 @@
+[package]
+name = "notercrux-sync-server"
+description = "Notercrux sync server. Stores and relays end-to-end encrypted operations; never sees plaintext."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "notercrux_sync_server"
+path = "src/lib.rs"
+
+[[bin]]
+name = "notercrux-sync-server"
+path = "src/main.rs"
+
+[dependencies]
+notercrux-crypto = { path = "../../crates/crypto" }
+notercrux-protocol = { path = "../../crates/protocol" }
+axum = "0.8"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "sync", "time", "fs", "net"] }
+tokio-postgres = "0.7"
+deadpool-postgres = "0.14"
+tokio-postgres-rustls = "0.13"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+webpki-roots = "1"
+async-trait = "0.1"
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid = { workspace = true, features = ["v4"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"

@@ -12,7 +12,9 @@ export type BlockKind =
   | 'callout'
   | 'code'
   | 'divider'
-  | 'pageLink';
+  | 'pageLink'
+  | 'image'
+  | 'file';
 
 export interface Mark {
   /** Inclusive start, in Unicode code points. */

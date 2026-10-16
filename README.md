@@ -25,40 +25,43 @@ An open-source Notion alternative for individuals. Fast, light, and yours.
 
 ## Why Notercrux
 
-|                           |                                                                                       |
-| ------------------------- | ------------------------------------------------------------------------------------- |
-| **Editor first**          | Nested pages, blocks with stable identity, Markdown shortcuts, keyboard-driven.       |
-| **Local-first**           | Everything lives in SQLite on your machine. Reading and editing never need a network. |
-| **Private by design**     | End-to-end encrypted sync is the goal: the server must never be able to read content. |
-| **Glass, with restraint** | One small material system, light/dark tuned separately, a reduced-transparency mode.  |
-| **Open**                  | AGPL-3.0, documented decisions, portable data, self-hostable sync (planned).          |
+|                           |                                                                                                           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Editor first**          | Nested pages, blocks with stable identity, Markdown shortcuts, keyboard-driven.                           |
+| **Local-first**           | Everything lives in SQLite on your machine. Reading and editing never need a network.                     |
+| **Private by design**     | End-to-end encrypted sync is the goal: the server must never be able to read content.                     |
+| **Glass, with restraint** | One small material system, light/dark tuned separately, a reduced-transparency mode.                      |
+| **Open**                  | AGPL-3.0, documented decisions, portable data, self-hostable sync ([guide](docs/self-hosting/README.md)). |
 
 Not goals: AI features, charts, or team-workspace features. See the [blueprint](Implementation/IMPLEMENTATION.md).
 
 ## Status
 
-Notercrux is at **Phase 3 of 6: essential productivity features** (editor, links, databases, search, settings). It is not usable as a daily
+Notercrux is at **Phase 4 of 6: encryption and sync** (on top of the editor, links, databases, search and settings). It is not usable as a daily
 notes app yet. What exists, and how well it is verified:
 
-| Area                                                                                                                 | State                                                                       |
-| -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Desktop shell (Tauri 2): sidebar page tree, palette, menus, dialogs, settings                                        | Working in the browser preview; native build compiles                       |
-| Page tree: create, nest, rename, move, duplicate, archive, restore, delete                                           | Implemented and tested in Rust; wired to the sidebar                        |
-| Editor: headings, lists, tasks, quotes, callouts, code, marks, slash menu, selection toolbar, block moves, undo/redo | Working; saved as structured blocks, not HTML                               |
-| Marquee selection of several blocks from the margins (copy/cut/delete/duplicate/turn into)                           | Implemented and tested; auto-scroll checked in a browser preview            |
-| Block menu (click the handle), right-click menus, code language + highlighting, callout icon/colour                  | Implemented and tested; frosted look verified in a browser preview only     |
-| Drag-and-drop for pages and blocks, keyboard reordering                                                              | Implemented; verified with synthetic events only (not native pointer drags) |
-| Page links (`[[`), backlinks, navigation history, content search with excerpts, command palette                      | Implemented and tested                                                      |
-| Databases: typed properties, relations, views with filters and sorts, record pages                                   | Implemented and tested; sync behaviour not designed yet                     |
-| Settings: accent, typeface, size, page width, rebindable shortcuts                                                   | Implemented and tested                                                      |
-| Export/import: Markdown (lossy, with warnings) and lossless JSON                                                     | Implemented and tested; native file dialogs not exercised yet               |
-| Local persistence + full-text search (SQLite)                                                                        | Implemented and tested                                                      |
-| Glass materials, light/dark, reduced transparency / motion                                                           | Implemented; **native macOS/Windows materials not yet verified**            |
-| CRDT sync between two simulated devices ([ADR 0003](docs/decisions/0003-crdt-sync.md))                               | Spike, tested; **not used by the app**                                      |
-| E2EE keys, recovery, device enrollment ([ADR 0004](docs/decisions/0004-e2ee-key-hierarchy.md))                       | Spike, tested; **not reviewed, not used by the app**                        |
-| Sync server, attachments, iOS app, Notion import                                                                     | Not started                                                                 |
+| Area                                                                                                                                                             | State                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Desktop shell (Tauri 2): sidebar page tree, palette, menus, dialogs, settings                                                                                    | Working in the browser preview; native build compiles                                                                          |
+| Page tree: create, nest, rename, move, duplicate, archive, restore, delete                                                                                       | Implemented and tested in Rust; wired to the sidebar                                                                           |
+| Editor: headings, lists, tasks, quotes, callouts, code, marks, slash menu, selection toolbar, block moves, undo/redo                                             | Working; saved as structured blocks, not HTML                                                                                  |
+| Marquee selection of several blocks from the margins (copy/cut/delete/duplicate/turn into)                                                                       | Implemented and tested; auto-scroll checked in a browser preview                                                               |
+| Block menu (click the handle), right-click menus, code language + highlighting, callout icon/colour                                                              | Implemented and tested; frosted look verified in a browser preview only                                                        |
+| Drag-and-drop for pages and blocks, keyboard reordering                                                                                                          | Implemented; verified with synthetic events only (not native pointer drags)                                                    |
+| Page links (`[[`), backlinks, navigation history, content search with excerpts, command palette                                                                  | Implemented and tested                                                                                                         |
+| Databases: typed properties, relations, views with filters and sorts, record pages                                                                               | Implemented and tested; sync behaviour not designed yet                                                                        |
+| Settings: accent, typeface, size, page width, rebindable shortcuts                                                                                               | Implemented and tested                                                                                                         |
+| Export/import: Markdown (lossy, with warnings) and lossless JSON                                                                                                 | Implemented and tested; native file dialogs not exercised yet                                                                  |
+| Local persistence + full-text search (SQLite)                                                                                                                    | Implemented and tested                                                                                                         |
+| Glass materials, light/dark, reduced transparency / motion                                                                                                       | Implemented; **native macOS/Windows materials not yet verified**                                                               |
+| CRDT merge layer: pages, tree moves, databases; recovered edits instead of silent loss ([ADR 0009](docs/decisions/0009-merge-layer-and-recovered-edits.md))      | Implemented; convergence fuzzed and scenario-tested                                                                            |
+| End-to-end encryption, device enrollment, revocation with key rotation, recovery key ([ADR 0008](docs/decisions/0008-key-management-enrollment-and-recovery.md)) | Implemented and tested; **not independently reviewed**                                                                         |
+| Sync server (axum, PostgreSQL or in memory), client engine with retry/backoff, Settings, Sync ([ADR 0007](docs/decisions/0007-sync-protocol-and-server.md))      | Implemented; tested against a real server and PostgreSQL 17; **the native app's keychain and file dialogs were not exercised** |
+| Image and file blocks, encrypted resumable attachment sync                                                                                                       | Implemented and tested; picker, paste and drop not exercised in the native app                                                 |
+| iOS app, Notion import, hosted service, compaction of sync history                                                                                               | Not started                                                                                                                    |
 
-Nothing here has had a security review. Do not rely on it to protect sensitive data.
+Nothing here has had a security review. Do not rely on it to protect sensitive data. See
+[docs/security](docs/security/README.md) for what is and is not protected.
 
 ## Getting started
 
@@ -70,6 +73,7 @@ pnpm install
 pnpm dev          # native desktop app (Tauri)
 pnpm web          # UI only, in a browser, with a localStorage mock backend
 pnpm test         # TypeScript and Rust tests
+cargo run -p notercrux-sync-server   # a local sync server to try sync against (in memory)
 ```
 
 See [docs/development](docs/development/README.md) for details.

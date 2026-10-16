@@ -231,3 +231,19 @@ describe('page links', () => {
     expect(fromProseMirror(toProseMirror(back)).blocks[0]!.marks).toEqual(doc.blocks[0]!.marks);
   });
 });
+
+describe('attachments', () => {
+  it('are named in Markdown exports with a warning that the file is not included', () => {
+    const doc: Document = {
+      version: 1,
+      blocks: [
+        b('image', 'caption', { attrs: { attachment: 'a'.repeat(64), name: 'cat.png' } }),
+        b('file', '', { attrs: { attachment: 'b'.repeat(64), name: 'plan.pdf' } }),
+      ],
+    };
+    const md = documentToMarkdown('', doc);
+    expect(md.value).toContain('[Attachment: cat.png]');
+    expect(md.value).toContain('[Attachment: plan.pdf]');
+    expect(md.warnings.join(' ')).toMatch(/Attachments are not included/);
+  });
+});

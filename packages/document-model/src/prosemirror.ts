@@ -154,6 +154,16 @@ function toBlocks(node: PMNode): Block[] {
     }
     case 'horizontalRule':
       return [{ id: idOf(node), type: 'divider', text: '' }];
+    case 'image':
+    case 'file': {
+      const a = node.attrs ?? {};
+      const attrs: Record<string, unknown> = {};
+      for (const k of ['attachment', 'name', 'mime', 'size'] as const) {
+        if (a[k] !== undefined && a[k] !== null && a[k] !== '') attrs[k] = a[k];
+      }
+      const text = node.type === 'image' && typeof a.caption === 'string' ? a.caption : '';
+      return [{ id: idOf(node), type: node.type, text, attrs }];
+    }
     default:
       throw new UnsupportedContentError(`node "${node.type}"`);
   }
@@ -261,6 +271,23 @@ function pmGroup(blocks: Block[], i: number): PMNode[] {
       ];
     case 'divider':
       return [{ type: 'horizontalRule', attrs: { blockId: b.id } }];
+    case 'image':
+    case 'file': {
+      const a = b.attrs ?? {};
+      return [
+        {
+          type: b.type,
+          attrs: {
+            blockId: b.id,
+            attachment: a.attachment ?? null,
+            name: a.name ?? '',
+            mime: a.mime ?? '',
+            size: a.size ?? 0,
+            ...(b.type === 'image' ? { caption: b.text } : {}),
+          },
+        },
+      ];
+    }
     default:
       throw new UnsupportedContentError(`block type "${b.type}"`);
   }

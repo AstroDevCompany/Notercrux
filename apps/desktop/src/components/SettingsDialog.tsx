@@ -15,6 +15,7 @@ import { DEFAULTS, updateSettings, useSettings, type Settings } from '../state/s
 import logo from '../assets/mintflow-logo.webp';
 import { AppLogo } from './AppLogo';
 import { Dialog } from './Dialog';
+import { SyncSettings } from './SyncSettings';
 
 function Segmented<K extends keyof Settings>({
   label,
@@ -222,6 +223,8 @@ export function SettingsDialog() {
             { value: 'full', label: 'Full' },
           ]}
         />
+
+        <SyncSettings />
 
         <h3 className="dialog-sub">Keyboard shortcuts</h3>
         {COMMANDS.map((c) => (

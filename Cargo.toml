@@ -4,7 +4,10 @@ members = [
   "crates/domain",
   "crates/storage",
   "crates/crypto",
+  "crates/crdt",
+  "crates/protocol",
   "crates/sync",
+  "apps/sync-server",
   "apps/desktop/src-tauri",
 ]
 

@@ -5,11 +5,13 @@ import { CommandPalette } from './components/CommandPalette';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { PageView } from './components/PageView';
 import { SettingsDialog } from './components/SettingsDialog';
+import { AddDeviceDialog, SyncWizard } from './components/SyncDialogs';
 import { Sidebar } from './components/Sidebar';
 import { Toolbar } from './components/Toolbar';
 import { useMaterial } from './hooks/useMaterial';
 import { actions, canGo, getState, useApp } from './state/app';
 import { commandForEvent } from './state/shortcuts';
+import { startSync } from './state/sync';
 
 export default function App() {
   useMaterial();
@@ -22,6 +24,7 @@ export default function App() {
   const page = pages.find((p) => p.id === currentId && !p.archivedAt);
 
   useEffect(() => void actions.init(), []);
+  useEffect(() => void startSync(), []);
 
   // Fallback context menu: anywhere not handled by a component (those stop propagation). Text
   // fields keep the native menu (spelling, cut/copy/paste); nothing else shows the webview's
@@ -148,6 +151,8 @@ export default function App() {
       )}
       <CommandPalette />
       <SettingsDialog />
+      <SyncWizard />
+      <AddDeviceDialog />
       <ConfirmDialog />
     </div>
   );

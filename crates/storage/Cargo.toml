@@ -7,8 +7,10 @@ license.workspace = true
 
 [dependencies]
 notercrux-domain = { path = "../domain" }
+notercrux-crdt = { path = "../crdt" }
 rusqlite.workspace = true
 serde.workspace = true
+sha2 = "0.10"
 serde_json.workspace = true
 thiserror.workspace = true
 

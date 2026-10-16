@@ -7,3 +7,16 @@ export const setFlusher = (fn: (() => Promise<void>) | null) => {
 export const flushEditor = async () => {
   await flusher?.();
 };
+
+/** Called when another device changed documents (`page:<id>` keys) that are now stored locally. */
+type RemoteListener = (documentsChanged: string[]) => void;
+const remoteListeners = new Set<RemoteListener>();
+
+export const onRemoteDocumentChange = (fn: RemoteListener) => {
+  remoteListeners.add(fn);
+  return () => {
+    remoteListeners.delete(fn);
+  };
+};
+export const announceRemoteChange = (documentsChanged: string[]) =>
+  remoteListeners.forEach((l) => l(documentsChanged));

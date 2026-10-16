@@ -21,6 +21,10 @@ const PATHS = {
   filter: 'M4 5h16l-6 8v6l-4-2v-4z',
   sort: 'M8 5v14M5 16l3 3 3-3M16 19V5M13 8l3-3 3 3',
   x: 'M6 6l12 12M18 6L6 18',
+  sync: 'M20 11a8 8 0 00-14-4M4 4v4h4M4 13a8 8 0 0014 4M20 20v-4h-4',
+  image: 'M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4M9 9h.01',
+  file: 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6',
+  download: 'M12 4v11M7 11l5 5 5-5M5 20h14',
   link: 'M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1',
 } as const;
 

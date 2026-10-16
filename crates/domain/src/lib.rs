@@ -7,6 +7,7 @@ pub mod block;
 pub mod database;
 pub mod ids;
 pub mod page;
+pub mod rebase;
 pub mod tree;
 
 pub use block::{Block, BlockKind, Document, Mark, DOCUMENT_SCHEMA_VERSION};
@@ -16,4 +17,5 @@ pub use database::{
 };
 pub use ids::{BlockId, PageId};
 pub use page::{Page, PageKind};
+pub use rebase::{rebase, Rebased, CONFLICT_ICON};
 pub use tree::{PageTree, TreeError};

@@ -10,7 +10,8 @@ import {
 import { api } from '../api';
 import { createExtensions } from '../editor/extensions';
 import { actions, pageLabel } from '../state/app';
-import { setFlusher } from '../state/editorBridge';
+import { onRemoteDocumentChange, setFlusher } from '../state/editorBridge';
+import { replaceContent, sameDocument } from '../editor/replaceContent';
 import { Backlinks } from './Backlinks';
 import { BlockHandle } from './BlockHandle';
 import { BlockRangeOverlay, MarqueeBand, useMarquee } from './MarqueeSelect';
@@ -76,6 +77,10 @@ function Surface({ page, initial }: { page: Page; initial: Document }) {
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const dirty = useRef(false);
   const pending = useRef<() => Promise<void>>(undefined);
+  /** The copy of the page the editor last matched; changes from other devices are merged against it. */
+  const base = useRef<Document>(initial);
+  /** Bumped on every edit, to tell whether the user kept typing while a save was in flight. */
+  const version = useRef(0);
   const inner = useRef<HTMLDivElement>(null);
   const article = useRef<HTMLElement>(null);
   const [blockMenu, setBlockMenu] = useState<{ pos: number; anchor: Anchor } | null>(null);
@@ -89,14 +94,31 @@ function Surface({ page, initial }: { page: Page; initial: Document }) {
     },
     onUpdate: ({ editor }) => {
       dirty.current = true;
+      version.current += 1;
       setSave('saving');
       pending.current = async () => {
         try {
           // Convert first: unsupported content must never be silently dropped on save.
-          const document = fromProseMirror(editor.getJSON());
-          await api.saveDocument(page.id, document);
-          dirty.current = false;
-          setSave('saved');
+          const sent = fromProseMirror(editor.getJSON());
+          const sentVersion = version.current;
+          // Saved on top of the page as it is now, so edits other devices made are never overwritten.
+          const res = await api.saveDocumentRebased(page.id, base.current, sent);
+          const untouched = sentVersion === version.current;
+          if (sameDocument(res.document, sent)) {
+            base.current = sent;
+          } else if (untouched) {
+            replaceContent(editor, res.document);
+            base.current = res.document;
+            if (res.conflicts > 0) {
+              actions.notify('Another device edited the same text at the same time.', [
+                'Your version is kept. The other version is in a callout at the end of the page.',
+              ]);
+            }
+          } else {
+            base.current = sent; // still typing: the next save merges the rest
+          }
+          if (untouched) dirty.current = false;
+          setSave(untouched ? 'saved' : 'saving');
           setSaveError(null);
         } catch (e) {
           setSave('error');
@@ -107,6 +129,28 @@ function Surface({ page, initial }: { page: Page; initial: Document }) {
       timer.current = setTimeout(() => void pending.current?.(), 350);
     },
   });
+
+  // Another device changed this page: show it. Unsaved typing is saved first and merged.
+  useEffect(() => {
+    if (!editor) return;
+    return onRemoteDocumentChange((keys) => {
+      if (!keys.includes(`page:${page.id}`)) return;
+      void (async () => {
+        if (dirty.current) {
+          clearTimeout(timer.current);
+          await pending.current?.();
+          return;
+        }
+        const seen = version.current;
+        const fresh = await api.loadDocument(page.id);
+        if (seen !== version.current || dirty.current) return; // typing started; its save will merge
+        if (!sameDocument(fresh, base.current)) {
+          replaceContent(editor, fresh);
+          base.current = fresh;
+        }
+      })();
+    });
+  }, [editor, page.id]);
 
   // Enter on a selected block opens its options, anchored to the block.
   useEffect(() => {

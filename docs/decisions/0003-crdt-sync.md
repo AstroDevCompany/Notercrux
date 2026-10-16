@@ -1,6 +1,9 @@
 # ADR 0003: Loro CRDT documents over an opaque relay
 
-**Status:** Proposed (spike: `crates/sync`)
+**Status:** Accepted. The spike's choice (Loro) stands; Phase 4 built it into the app. See
+[ADR 0009](0009-merge-layer-and-recovered-edits.md) for how, and for the questions listed under
+"Not yet validated" below. The spike crate was replaced by `crates/crdt`, `crates/protocol`,
+`crates/sync` and `apps/sync-server`.
 
 ## Context
 

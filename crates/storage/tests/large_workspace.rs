@@ -138,3 +138,55 @@ fn benchmark_large_workspace() {
     s.rebuild_search_index().unwrap();
     println!("rebuild search index:     {:?}", t.elapsed());
 }
+
+#[test]
+#[ignore = "benchmark: run explicitly with --release --nocapture"]
+fn benchmark_sync_capture_cost() {
+    use notercrux_domain::{Block, BlockKind, Document};
+    let mut s = Store::open_in_memory().unwrap();
+    s.enable_sync().unwrap();
+
+    let t = Instant::now();
+    let ids = build_tree(&mut s, 7, 4); // 7 + 49 + 343 + 2401 = 2,800 pages
+    println!(
+        "create {} pages with sync on:      {:?} ({:?}/page)",
+        ids.len(),
+        t.elapsed(),
+        t.elapsed() / ids.len() as u32
+    );
+
+    let t = Instant::now();
+    s.rename_page(ids[100], "renamed").unwrap();
+    println!("rename a page in a 2,800-page tree: {:?}", t.elapsed());
+    let t = Instant::now();
+    s.move_page(ids[1500], Some(ids[3]), 0).unwrap();
+    println!("move a page in a 2,800-page tree:   {:?}", t.elapsed());
+
+    // Autosave of a long document: the edit that happens every few hundred milliseconds of typing.
+    for blocks in [100usize, 1_000, 5_000] {
+        let mut doc = Document {
+            version: 1,
+            blocks: (0..blocks)
+                .map(|i| {
+                    Block::new(
+                        BlockKind::Paragraph,
+                        format!("Block {i}: the quick brown fox jumps over the lazy dog."),
+                    )
+                })
+                .collect(),
+        };
+        s.save_document(ids[0], &doc).unwrap(); // first save creates the content
+        let t = Instant::now();
+        let n = 20;
+        for k in 0..n {
+            doc.blocks[blocks / 2].text.push_str(&format!(" edit{k}"));
+            s.save_document(ids[0], &doc).unwrap();
+        }
+        println!(
+            "autosave of a {blocks}-block page: {:?} per save",
+            t.elapsed() / n
+        );
+    }
+    let stats = s.sync_stats().unwrap();
+    println!("pending ops: {}", stats.pending_ops);
+}

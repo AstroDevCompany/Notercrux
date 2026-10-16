@@ -6,10 +6,10 @@ use notercrux_domain::{
 use notercrux_storage::{Record, SearchHit, Store};
 use serde_json::Value;
 use std::collections::HashMap;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::{Arc, Mutex, MutexGuard};
 use tauri::State;
 
-pub struct AppState(pub Mutex<Store>);
+pub struct AppState(pub Arc<Mutex<Store>>);
 
 type CmdResult<T> = Result<T, String>;
 
@@ -124,6 +124,20 @@ pub fn delete_page(state: State<'_, AppState>, page_id: String) -> CmdResult<()>
 #[tauri::command]
 pub fn load_document(state: State<'_, AppState>, page_id: String) -> CmdResult<Document> {
     store(&state)?.load_document(id(&page_id)?).map_err(err)
+}
+
+/// Saves the editor's changes on top of the page as it is now (other devices may have changed it
+/// since the editor loaded `base`). Returns the merged page for the editor to show.
+#[tauri::command]
+pub fn save_document_rebased(
+    state: State<'_, AppState>,
+    page_id: String,
+    base: Document,
+    document: Document,
+) -> CmdResult<notercrux_domain::Rebased> {
+    store(&state)?
+        .save_document_rebased(id(&page_id)?, &base, &document)
+        .map_err(err)
 }
 
 #[tauri::command]

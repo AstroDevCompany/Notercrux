@@ -59,6 +59,23 @@ Finding that changed the code: every selection re-rendered all 3,000 sidebar row
 renders only the visible window with memoized rows and stable handlers, and the database table is
 windowed the same way.
 
+## Sync capture cost (release build, in-memory SQLite)
+
+Local changes are also written into the CRDT documents and queued as operations.
+
+| Operation (sync on)                 | Cost         |
+| ----------------------------------- | ------------ |
+| Create a page (2,800 pages created) | 0.94 ms each |
+| Rename a page                       | 1.9 ms       |
+| Move a page (2,800-page tree)       | 8.3 ms       |
+| Save a 100-block page               | 0.78 ms      |
+| Save a 1,000-block page             | 5.0 ms       |
+| Save a 5,000-block page             | 25.8 ms      |
+
+Measured by `benchmark_sync_capture_cost` in `crates/storage/tests/large_workspace.rs` (ignored by
+default; run with `-- --ignored --nocapture`). Not measured: network transfer, applying large remote
+batches in the native app, CRDT history growth over months, memory over long sessions.
+
 ## Known limits
 
 - A page with ~10,000 blocks (roughly 200 pages of text) takes 1–2 s to open: ProseMirror renders
@@ -66,4 +83,5 @@ windowed the same way.
   editor is not planned.
 - Typing in the filter box of a database saves the view on every keystroke; very large databases
   would benefit from debouncing.
-- Nothing here covers sync, encryption, attachments or memory over long sessions.
+- Sync history is never compacted, so a heavily edited page document grows over time.
+- Attachments up to 100 MB are held in memory while being displayed or transferred.
