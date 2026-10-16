@@ -5,3 +5,8 @@ dist
 .DS_Store
 .env
 apps/desktop/src-tauri/gen
+
+# iOS build outputs
+apps/ios/Core/
+apps/ios/Notercrux.xcodeproj/
+apps/ios/build/

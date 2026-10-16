@@ -1,0 +1,19 @@
+{
+  "" : {
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/NotercruxUITests-primary.dia",
+    "emit-module-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/NotercruxUITests-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/NotercruxUITests-primary-emit-module.dia",
+    "pch" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/NotercruxUITests-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/NotercruxUITests-primary.swiftdeps"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/UITests/JoinFlowTests.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/NotercruxUITests.build/Objects-normal/arm64/JoinFlowTests~partial.swiftmodule"
+  }
+}

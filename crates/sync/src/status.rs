@@ -20,7 +20,7 @@ pub enum Phase {
     KeysMissing,
 }
 
-#[derive(Clone, Debug, Default, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SyncStatus {
     pub phase: Phase,

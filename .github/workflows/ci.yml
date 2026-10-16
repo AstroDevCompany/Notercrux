@@ -53,6 +53,22 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo test -p notercrux-sync-server -p notercrux-sync
 
+  ios:
+    # Not yet run on GitHub's runners; the same commands pass locally (see apps/ios/README.md).
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with: { targets: 'aarch64-apple-ios,aarch64-apple-ios-sim' }
+      - uses: Swatinem/rust-cache@v2
+      - run: brew install xcodegen
+      - run: ./scripts/build-ios-core.sh
+      - run: cd apps/ios && xcodegen generate
+      - run: >
+          cd apps/ios && xcodebuild -project Notercrux.xcodeproj -scheme Notercrux
+          -destination 'platform=iOS Simulator,name=iPhone 17 Pro' test
+          -only-testing:NotercruxTests CODE_SIGNING_ALLOWED=NO
+
   web:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,491 @@
+---
+triple: 'arm64-apple-darwin'
+binary-path: '/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Products/Debug-iphoneos/NotercruxUITests-Runner.app/PlugIns/NotercruxUITests.xctest/NotercruxUITests'
+relocations:
+  - {
+      offset: 0x53BC9,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKF',
+      symObjAddr: 0x0,
+      symBinAddr: 0x4000,
+      symSize: 0xDA0,
+    }
+  - {
+      offset: 0x53D17,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSo11XCUIElementCSbIeggd_ABSbIeyByd_TR',
+      symObjAddr: 0x1254,
+      symBinAddr: 0x5254,
+      symSize: 0x80,
+    }
+  - {
+      offset: 0x53D2F,
+      size: 0x8,
+      addend: 0x0,
+      symName: _block_copy_helper,
+      symObjAddr: 0x12D4,
+      symBinAddr: 0x52D4,
+      symSize: 0x44,
+    }
+  - {
+      offset: 0x53D43,
+      size: 0x8,
+      addend: 0x0,
+      symName: _block_destroy_helper,
+      symObjAddr: 0x1318,
+      symBinAddr: 0x5318,
+      symSize: 0x18,
+    }
+  - {
+      offset: 0x53D57,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSo15XCUIApplicationCMa',
+      symObjAddr: 0x1330,
+      symBinAddr: 0x5330,
+      symSize: 0x60,
+    }
+  - {
+      offset: 0x53D6B,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu1_TA',
+      symObjAddr: 0x1694,
+      symBinAddr: 0x5694,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53D7F,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu3_TA',
+      symObjAddr: 0x16F4,
+      symBinAddr: 0x56F4,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53D93,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu4_TA',
+      symObjAddr: 0x1744,
+      symBinAddr: 0x5744,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53DA7,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSSWOh',
+      symObjAddr: 0x1798,
+      symBinAddr: 0x5798,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53DBB,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$ss26DefaultStringInterpolationVWOh',
+      symObjAddr: 0x17C0,
+      symBinAddr: 0x57C0,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53DCF,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu6_TA',
+      symObjAddr: 0x1944,
+      symBinAddr: 0x5944,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53DE3,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu8_TA',
+      symObjAddr: 0x19C4,
+      symBinAddr: 0x59C4,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53DF7,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu10_TA',
+      symObjAddr: 0x1B10,
+      symBinAddr: 0x5B10,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53E0B,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu11_TA',
+      symObjAddr: 0x1E30,
+      symBinAddr: 0x5E30,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53E1F,
+      size: 0x8,
+      addend: 0x0,
+      symName: ___swift_instantiateConcreteTypeFromMangledNameV2,
+      symObjAddr: 0x1F78,
+      symBinAddr: 0x5F78,
+      symSize: 0x80,
+    }
+  - {
+      offset: 0x53E33,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsCMa',
+      symObjAddr: 0x22F8,
+      symBinAddr: 0x62F8,
+      symSize: 0x24,
+    }
+  - {
+      offset: 0x53E47,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSo11NSPredicateCMa',
+      symObjAddr: 0x231C,
+      symBinAddr: 0x631C,
+      symSize: 0x60,
+    }
+  - {
+      offset: 0x53E5B,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s6XCTest13XCTAssertTrue__4file4lineySbyKXK_SSyXKs12StaticStringVSutFfA0_SSycfu_',
+      symObjAddr: 0x2394,
+      symBinAddr: 0x6394,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53E73,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSa12_endMutationyyF',
+      symObjAddr: 0x23BC,
+      symBinAddr: 0x63BC,
+      symSize: 0xC,
+    }
+  - {
+      offset: 0x53E8B,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSaySSGSayxGSlsWl',
+      symObjAddr: 0x23C8,
+      symBinAddr: 0x63C8,
+      symSize: 0x74,
+    }
+  - {
+      offset: 0x53E9F,
+      size: 0x8,
+      addend: 0x0,
+      symName: ___swift_instantiateConcreteTypeFromMangledNameAbstractV2,
+      symObjAddr: 0x243C,
+      symBinAddr: 0x643C,
+      symSize: 0x78,
+    }
+  - {
+      offset: 0x53EB3,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$ss16IndexingIteratorVySaySSGGWOh',
+      symObjAddr: 0x24B4,
+      symBinAddr: 0x64B4,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x53EED,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$ss27_finalizeUninitializedArrayySayxGABnlF',
+      symObjAddr: 0x1214,
+      symBinAddr: 0x5214,
+      symSize: 0x40,
+    }
+  - {
+      offset: 0x53F17,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$ss5print_9separator10terminatoryypd_S2StFfA0_',
+      symObjAddr: 0x17E8,
+      symBinAddr: 0x57E8,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x53F33,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$ss5print_9separator10terminatoryypd_S2StFfA1_',
+      symObjAddr: 0x1814,
+      symBinAddr: 0x5814,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x53FAD,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKF',
+      symObjAddr: 0x0,
+      symBinAddr: 0x4000,
+      symSize: 0xDA0,
+    }
+  - {
+      offset: 0x54069,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSSSgyKXEfu_',
+      symObjAddr: 0xDA0,
+      symBinAddr: 0x4DA0,
+      symSize: 0x104,
+    }
+  - {
+      offset: 0x54088,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSSyXEfu0_',
+      symObjAddr: 0xEA4,
+      symBinAddr: 0x4EA4,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x540A0,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbSo11XCUIElementCcfU_',
+      symObjAddr: 0xED0,
+      symBinAddr: 0x4ED0,
+      symSize: 0x344,
+    }
+  - {
+      offset: 0x54100,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKF2elL_ySo11XCUIElementCSSF',
+      symObjAddr: 0x13BC,
+      symBinAddr: 0x53BC,
+      symSize: 0xF4,
+    }
+  - {
+      offset: 0x5413D,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu1_',
+      symObjAddr: 0x14B0,
+      symBinAddr: 0x54B0,
+      symSize: 0x1E4,
+    }
+  - {
+      offset: 0x5415C,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu3_',
+      symObjAddr: 0x16CC,
+      symBinAddr: 0x56CC,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x5417B,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu4_',
+      symObjAddr: 0x171C,
+      symBinAddr: 0x571C,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x5419A,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSSyXEfu5_',
+      symObjAddr: 0x176C,
+      symBinAddr: 0x576C,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x541B2,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu6_',
+      symObjAddr: 0x1840,
+      symBinAddr: 0x5840,
+      symSize: 0x104,
+    }
+  - {
+      offset: 0x541D1,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSSyXEfu7_',
+      symObjAddr: 0x196C,
+      symBinAddr: 0x596C,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x541E9,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu8_',
+      symObjAddr: 0x1998,
+      symBinAddr: 0x5998,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x54208,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSSyXEfu9_',
+      symObjAddr: 0x19EC,
+      symBinAddr: 0x59EC,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x54220,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu10_',
+      symObjAddr: 0x1A18,
+      symBinAddr: 0x5A18,
+      symSize: 0xF8,
+    }
+  - {
+      offset: 0x5423F,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFSbyKXEfu11_',
+      symObjAddr: 0x1B38,
+      symBinAddr: 0x5B38,
+      symSize: 0x2F8,
+    }
+  - {
+      offset: 0x542BC,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSo15XCUIApplicationCABycfC',
+      symObjAddr: 0x1390,
+      symBinAddr: 0x5390,
+      symSize: 0x2C,
+    }
+  - {
+      offset: 0x542DE,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s6XCTest13XCTAssertTrue__4file4lineySbyKXK_SSyXKs12StaticStringVSutFfA0_',
+      symObjAddr: 0x16BC,
+      symBinAddr: 0x56BC,
+      symSize: 0x10,
+    }
+  - {
+      offset: 0x54321,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC04testC42WorkspaceThenEditAndSyncWithDesktopStandInyyKFTo',
+      symObjAddr: 0x1E58,
+      symBinAddr: 0x5E58,
+      symSize: 0x120,
+    }
+  - {
+      offset: 0x54340,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC10invocationACSo12NSInvocationCSg_tcfC',
+      symObjAddr: 0x1FF8,
+      symBinAddr: 0x5FF8,
+      symSize: 0x4C,
+    }
+  - {
+      offset: 0x54354,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC10invocationACSo12NSInvocationCSg_tcfc',
+      symObjAddr: 0x2044,
+      symBinAddr: 0x6044,
+      symSize: 0x94,
+    }
+  - {
+      offset: 0x543AE,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC10invocationACSo12NSInvocationCSg_tcfcTo',
+      symObjAddr: 0x20D8,
+      symBinAddr: 0x60D8,
+      symSize: 0x40,
+    }
+  - {
+      offset: 0x543C2,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC8selectorAC10ObjectiveC8SelectorV_tcfC',
+      symObjAddr: 0x2118,
+      symBinAddr: 0x6118,
+      symSize: 0x30,
+    }
+  - {
+      offset: 0x543D6,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC8selectorAC10ObjectiveC8SelectorV_tcfc',
+      symObjAddr: 0x2148,
+      symBinAddr: 0x6148,
+      symSize: 0x88,
+    }
+  - {
+      offset: 0x54407,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsC8selectorAC10ObjectiveC8SelectorV_tcfcTo',
+      symObjAddr: 0x21D0,
+      symBinAddr: 0x61D0,
+      symSize: 0x24,
+    }
+  - {
+      offset: 0x5441B,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsCACycfC',
+      symObjAddr: 0x21F4,
+      symBinAddr: 0x61F4,
+      symSize: 0x28,
+    }
+  - {
+      offset: 0x5442F,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsCACycfc',
+      symObjAddr: 0x221C,
+      symBinAddr: 0x621C,
+      symSize: 0x74,
+    }
+  - {
+      offset: 0x54453,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsCACycfcTo',
+      symObjAddr: 0x2290,
+      symBinAddr: 0x6290,
+      symSize: 0x20,
+    }
+  - {
+      offset: 0x54467,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$s16NotercruxUITests13JoinFlowTestsCfD',
+      symObjAddr: 0x22B0,
+      symBinAddr: 0x62B0,
+      symSize: 0x48,
+    }
+  - {
+      offset: 0x5448B,
+      size: 0x8,
+      addend: 0x0,
+      symName: '_$sSo15XCUIApplicationCABycfcTO',
+      symObjAddr: 0x237C,
+      symBinAddr: 0x637C,
+      symSize: 0x18,
+    }
+...

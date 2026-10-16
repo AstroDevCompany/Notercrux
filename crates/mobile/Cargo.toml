@@ -1,0 +1,33 @@
+[package]
+name = "notercrux-mobile"
+description = "Foreign-language (Swift) interface to the Notercrux core: storage, merge layer and sync engine."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["staticlib", "lib"]
+name = "notercrux_mobile"
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+required-features = ["cli"]
+
+[features]
+cli = ["uniffi/cli"]
+
+[dependencies]
+notercrux-domain = { path = "../domain" }
+notercrux-storage = { path = "../storage" }
+notercrux-sync = { path = "../sync" }
+uniffi = { version = "0.29", features = ["tokio"] }
+tokio = { version = "1", features = ["rt-multi-thread", "sync", "time"] }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+notercrux-sync-server = { path = "../../apps/sync-server" }
+tokio = { version = "1", features = ["full"] }
+axum = "0.8"

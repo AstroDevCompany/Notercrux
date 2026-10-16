@@ -59,6 +59,19 @@ NOTERCRUX_TEST_DATABASE_URL=postgres://user@127.0.0.1:5432/ncx_test cargo test -
 
 Without the variable the same tests run against the in-memory repository.
 
+### Phase 5: iOS
+
+- `crates/mobile/tests/core.rs`: a phone-side core joins a desktop-side engine through a real server,
+  both edit offline, and both end up with both sets of changes, through the same JSON API Swift uses.
+- `apps/ios` `NotercruxTests` (run in the simulator, against the real Rust core): marks follow text
+  edits (including Unicode scalars), splitting and merging blocks, Backspace and `/` behaviour,
+  desktop-shaped JSON round trips with unknown attributes preserved, rebased saves, async calls on the
+  core's runtime. See [apps/ios/README.md](../../apps/ios/README.md).
+- Manual, on one physical iPhone (iPhone 15 Pro Max class): joining a stand-in desktop with an invite
+  code, receiving pages, editing on both sides, creating a page on the phone. Not exercised: iPad
+  layout, rotation, Dynamic Type, VoiceOver, background and low-connectivity behaviour, the Keychain
+  across reinstalls, screenshots of every state.
+
 Run everything with `pnpm test`.
 
 ## Not automated yet (manual checklist)

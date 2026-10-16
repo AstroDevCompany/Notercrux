@@ -1,0 +1,7 @@
+module notercrux_mobileFFI {
+    header "notercrux_mobileFFI.h"
+    export *
+    use "Darwin"
+    use "_Builtin_stdbool"
+    use "_Builtin_stdint"
+}

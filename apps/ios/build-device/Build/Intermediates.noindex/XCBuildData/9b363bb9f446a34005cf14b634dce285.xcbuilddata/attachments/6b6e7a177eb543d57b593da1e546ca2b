@@ -1,0 +1,159 @@
+{
+  "" : {
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Notercrux-primary.dia",
+    "emit-module-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Notercrux-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Notercrux-primary-emit-module.dia",
+    "pch" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Notercrux-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Notercrux-primary.swiftdeps"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Model/BlockOps.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockOps~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Model/JSONValue.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/JSONValue~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Model/Models.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/Models~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/NotercruxApp.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/NotercruxApp~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Services/AppModel.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/AppModel~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Services/DebugLaunch.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/DebugLaunch~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Services/KeychainVault.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/KeychainVault~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Services/PageEditor.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageEditor~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Views/BlockRow.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/BlockRow~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Views/PageListView.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageListView~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Views/PageView.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/PageView~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Views/RootView.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/RootView~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/App/Views/SyncView.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/SyncView~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/Core/notercrux_mobile.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/notercrux_mobile~partial.swiftmodule"
+  },
+  "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/Notercrux.build/Debug-iphoneos/Notercrux.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

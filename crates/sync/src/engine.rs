@@ -111,7 +111,7 @@ impl Engine {
             .and_then(|j| serde_json::from_str(&j).ok());
         let Some(account) = account else {
             *lock(&self.session) = None;
-            self.status.send_replace(SyncStatus::default());
+            self.replace_status(SyncStatus::default());
             return Ok(());
         };
         let keys = self
@@ -149,7 +149,7 @@ impl Engine {
             .with_store(|s| s.sync_get("rejected_ops"))?
             .and_then(|v| v.parse().ok())
             .unwrap_or(0);
-        self.status.send_replace(SyncStatus {
+        self.replace_status(SyncStatus {
             phase,
             server: Some(account.server),
             workspace_id: Some(account.workspace_id),
@@ -165,6 +165,18 @@ impl Engine {
         });
         self.refresh_counts();
         Ok(())
+    }
+
+    /// Publishes `new` only if it differs, so idle polling does not wake every observer.
+    fn replace_status(&self, new: SyncStatus) {
+        self.status.send_if_modified(|s| {
+            if *s == new {
+                false
+            } else {
+                *s = new;
+                true
+            }
+        });
     }
 
     pub(crate) fn with_store<T>(

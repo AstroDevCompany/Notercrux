@@ -1,0 +1,6 @@
+Target dependency graph (3 targets)
+Target 'NotercruxUITests' in project 'Notercrux'
+➜ Explicit dependency on target 'Notercrux' in project 'Notercrux'
+Target 'NotercruxTests' in project 'Notercrux'
+➜ Explicit dependency on target 'Notercrux' in project 'Notercrux'
+Target 'Notercrux' in project 'Notercrux' (no dependencies)

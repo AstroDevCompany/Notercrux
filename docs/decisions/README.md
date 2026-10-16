@@ -14,6 +14,7 @@ its consequences. Status is one of _proposed_, _accepted_, _superseded_.
 | [0007](0007-sync-protocol-and-server.md)               | Sync protocol, server and PostgreSQL             | Accepted            |
 | [0008](0008-key-management-enrollment-and-recovery.md) | Key management, enrollment, revocation, recovery | Accepted            |
 | [0009](0009-merge-layer-and-recovered-edits.md)        | CRDT merge layer, recovered edits, rebased saves | Accepted            |
+| [0010](0010-ios-app.md)                                | iOS app on the shared Rust core                  | Accepted            |
 
 "Accepted" means implemented and tested, not externally reviewed. Nothing in the security design
 has had an independent review.

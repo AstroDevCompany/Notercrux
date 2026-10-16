@@ -1,0 +1,66 @@
+{
+  "buildCommand": {
+    "command": "build",
+    "skipDependencies": false,
+    "style": "buildOnly"
+  },
+  "configuredTargets": [
+    {
+      "guid": "9f3efc8861fad6eb244da3fcd0363ce29e286943be9ad24a160ad52cab960bce"
+    }
+  ],
+  "containerPath": "/Users/luca/Desktop/Dev/Notercrux/apps/ios/Notercrux.xcodeproj",
+  "continueBuildingAfterErrors": false,
+  "dependencyScope": "workspace",
+  "enableIndexBuildArena": false,
+  "hideShellScriptEnvironment": false,
+  "parameters": {
+    "action": "build",
+    "activeArchitecture": "arm64",
+    "activeRunDestination": {
+      "disableOnlyActiveArch": false,
+      "hostTargetedPlatform": null,
+      "platform": "iphoneos",
+      "sdk": "iphoneos27.1",
+      "sdkVariant": "iphoneos",
+      "supportedArchitectures": ["arm64e", "arm64"],
+      "targetArchitecture": "arm64"
+    },
+    "arenaInfo": {
+      "buildIntermediatesPath": "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex",
+      "buildProductsPath": "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Products",
+      "derivedDataPath": "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device",
+      "indexDataStoreFolderPath": "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Index.noindex/DataStore",
+      "indexEnableDataStore": true,
+      "indexPCHPath": "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Index.noindex/PrecompiledHeaders",
+      "pchPath": "/Users/luca/Desktop/Dev/Notercrux/apps/ios/build-device/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName": "Debug",
+    "overrides": {
+      "commandLine": {
+        "table": {}
+      },
+      "synthesized": {
+        "table": {
+          "ACTION": "build",
+          "ASSETCATALOG_FILTER_FOR_DEVICE_MODEL": "iPhone16,2",
+          "ASSETCATALOG_FILTER_FOR_DEVICE_OS_VERSION": "27.0.1",
+          "ASSETCATALOG_FILTER_FOR_THINNING_DEVICE_CONFIGURATION": "iPhone16,2",
+          "BUILD_ACTIVE_RESOURCES_ONLY": "YES",
+          "ENABLE_PREVIEWS": "NO",
+          "ENABLE_XOJIT_PREVIEWS": "YES",
+          "TARGET_DEVICE_IDENTIFIER": "00008130-000E69993E60001C",
+          "TARGET_DEVICE_MODEL": "iPhone16,2",
+          "TARGET_DEVICE_OS_VERSION": "27.0.1",
+          "TARGET_DEVICE_PLATFORM_NAME": "iphoneos"
+        }
+      }
+    }
+  },
+  "schemeCommand": "launch",
+  "showNonLoggedProgress": true,
+  "useDryRun": false,
+  "useImplicitDependencies": true,
+  "useLegacyBuildLocations": false,
+  "useParallelTargets": true
+}
